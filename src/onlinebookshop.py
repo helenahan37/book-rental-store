@@ -14,10 +14,10 @@ from prettytable import PrettyTable
 # define a book list dictionary
 books = [
     {"id": "001", "name": "Python Crash Course", "author": "Eric Matthes", "price": 49.9, "status": "available", "due_date": None, "book_rate": 4.8},
-    {"id": "002", "name": "Web Scraping with Python", "author": "Ryan Mitchell", "price": 69.9, "status": "unavailable", "due_date": "2022-05-20", "book_rate": 4.5},
+    {"id": "002", "name": "Web Scraping with Python", "author": "Ryan Mitchell", "price": 69.9, "status": "unavailable", "due_date": "2023-05-20", "book_rate": 4.5},
     {"id": "003", "name": "Python Data Science Handbook", "author": "Jake VanderPlas", "price": 99.0, "status": "available", "due_date": None, "book_rate": 4.3},
     {"id": "004", "name": "Expert Python Programming", "author": "Tarek Ziade", "price": 79.0, "status": "available", "due_date": None, "book_rate": 3.8},
-    {"id": "005", "name": "Python Network Programming", "author": "Dr. M. O. Faruque Sarker", "price": 59.9, "status": "unavailable", "due_date": "2022-05-22", "book_rate": 4.0}
+    {"id": "005", "name": "Python Network Programming", "author": "Dr. M. O. Faruque Sarker", "price": 59.9, "status": "unavailable", "due_date": "2023-05-22", "book_rate": 4.0}
 ]
 
 
@@ -29,7 +29,7 @@ now = datetime.datetime.now()
 
 # define a function to calculate the waiting date between current date and due date
 booked_due_date = now.date() + datetime.timedelta(days=7)
-available_days = booked_due_date - now.date()
+
 
 # define a function to display book list
 def display_books(books):
@@ -52,11 +52,14 @@ def selected_book(books):
                 selected_book = book
                 break 
     if not selected_book:
-        print("Sorry, the book is not available in our online store. Please try again later.")
+        print("Sorry, the book is not available in our online store. Please try again later. If you would like to add this book into our online store, please press option 4 to add a new book.")
+        return None
         
     elif selected_book["status"] == "unavailable":
-        print(f"Sorry, the book is unavailable for rental. It will be available from {selected_book['due_date']}.")  
-        return
+        booked_due_date = datetime.datetime.strptime(selected_book["due_date"], "%Y-%m-%d").date()
+        available_days = booked_due_date - now.date()
+        print(f"Sorry, the book is unavailable for rental. It will be available from {selected_book['due_date']}, {available_days.days} days from today.")  
+        return None 
 
     return selected_book        
 
@@ -102,8 +105,8 @@ while True:
     
     if choice == '1':
         display_books(books)
-        selected_book_info= selected_book(books)
-        if selected_book_info:
+        selected_book_info = selected_book(books)
+        if selected_book_info != None:
             borrow_book(selected_book_info, selected_book_info["id"])
         
     
