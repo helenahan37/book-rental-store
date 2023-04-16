@@ -10,14 +10,16 @@
 
 import datetime
 from prettytable import PrettyTable
+import re
+
 
 # define a book list dictionary
 books = [
-    {"id": "001", "name": "Python Crash Course", "author": "Eric Matthes", "price": 49.9, "status": "available", "due_date": None, "book_rate": 4.8},
-    {"id": "002", "name": "Web Scraping with Python", "author": "Ryan Mitchell", "price": 69.9, "status": "unavailable", "due_date": "2023-05-20", "book_rate": 4.5},
-    {"id": "003", "name": "Python Data Science Handbook", "author": "Jake VanderPlas", "price": 99.0, "status": "available", "due_date": None, "book_rate": 4.3},
-    {"id": "004", "name": "Expert Python Programming", "author": "Tarek Ziade", "price": 79.0, "status": "available", "due_date": None, "book_rate": 3.8},
-    {"id": "005", "name": "Python Network Programming", "author": "Dr. M. O. Faruque Sarker", "price": 59.9, "status": "unavailable", "due_date": "2023-05-22", "book_rate": 4.0}
+    {"id": "001", "name": "Python Crash Course", "author": "Eric Matthes", "rental_price": 19.90, "status": "available", "due_date": None, "book_rate": 4.8},
+    {"id": "002", "name": "Web Scraping with Python", "author": "Ryan Mitchell", "rental_price": 19.00, "status": "unavailable", "due_date": "2023-05-20", "book_rate": 4.5},
+    {"id": "003", "name": "Python Data Science Handbook", "author": "Jake VanderPlas", "rental_price": 22.0, "status": "available", "due_date": None, "book_rate": 4.3},
+    {"id": "004", "name": "Expert Python Programming", "author": "Tarek Ziade", "rental_price": 15.90, "status": "available", "due_date": None, "book_rate": 3.8},
+    {"id": "005", "name": "Python Network Programming", "author": "Dr. M. O. Faruque Sarker", "rental_price": 23.50, "status": "unavailable", "due_date": "2023-05-22", "book_rate": 4.0}
 ]
 
 
@@ -31,12 +33,25 @@ now = datetime.datetime.now()
 booked_due_date = now.date() + datetime.timedelta(days=7)
 
 
+# email and phone regex
+email_regex = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
+
+# define a function to validate email
+def validate_email():
+    while True:
+        email = input("Email: ")
+        if not email_regex.match(email):
+            print("Sorry, the email address you have entered is not valid, please try again, format: (username)@(domainname).(top-leveldomain).")
+        else:
+            return email
+        
+        
 # define a function to display book list
 def display_books(books):
  # define a table to display book list 
-    table = PrettyTable(["ID", "Name", "Author", "Price", "Status", "Due Date", "Book Rate"])
+    table = PrettyTable(["ID", "Name", "Author", "rental_price", "Status", "Due Date", "Book Rate"])
     for book in books:
-        row=[book["id"], book["name"], book["author"], book["price"], book["status"], book["due_date"], book["book_rate"]]
+        row=[book["id"], book["name"], book["author"], book["rental_price"], book["status"], book["due_date"], book["book_rate"]]
         table.add_row(row)
     print("\nHere is the list of books for rental: ")
     print(table)
@@ -52,7 +67,7 @@ def selected_book(books):
                 selected_book = book
                 break 
     if not selected_book:
-        print("Sorry, the book is not available in our online store. Please try again later. If you would like to add this book into our online store, please press option 4 to add a new book.")
+        print("Sorry, the book ID you have entered is not list in our online store. If you would like to add a new book, please press option 3.")
         return None
         
     elif selected_book["status"] == "unavailable":
@@ -72,10 +87,10 @@ def borrow_book(selected_book, book_id):
         name = input("Name: ")
         address = input("Address: ")
         phone = input("Phone: ")
-        email = input("Email: ")
-        deposit = selected_book["price"]*0.2
+        email =validate_email()
+        deposit = selected_book["rental_price"]*0.2
         # create a receipt dictionary to store the receipt information
-        receipts = [{"name": name, "address": address, "phone": phone, "email": email, "book_id": book_id, "book_name": selected_book["name"], "borrow_date": now.date(), "due_date": booked_due_date, "deposit": selected_book["price"]*0.2}]
+        receipts = [{"name": name, "address": address, "phone": phone, "email": email, "book_id": book_id, "book_name": selected_book["name"], "borrow_date": now.date(), "due_date": booked_due_date, "deposit": selected_book["rental_price"]*0.2}]
         print(f"Thank you for borrowing {selected_book['name']}. Here is your receipt.")
         
         # create a table to display receipt information
@@ -98,7 +113,8 @@ while True:
     print("\nWelcome to our online book rental service. Please choose your service type:")
     print("1. Borrow a book")
     print("2. Return a book")
-    print("3. Exit the program")
+    print("3. Add a wish list book")
+    print("4. Exit the program")
 
     # obtain user input1
     choice = input("Please enter your choice: ")
