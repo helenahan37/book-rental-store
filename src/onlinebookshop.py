@@ -31,11 +31,66 @@ now = datetime.datetime.now()
 booked_due_date = now.date() + datetime.timedelta(days=7)
 available_days = booked_due_date - now.date()
 
-# define a table to display book list
-table = PrettyTable(["ID", "Name", "Author", "Price", "Status", "Due Date", "Book Rate"])
+# define a function to display book list
+def display_books(books):
+ # define a table to display book list 
+    table = PrettyTable(["ID", "Name", "Author", "Price", "Status", "Due Date", "Book Rate"])
+    for book in books:
+        row=[book["id"], book["name"], book["author"], book["price"], book["status"], book["due_date"], book["book_rate"]]
+        table.add_row(row)
+    print("\nHere is the list of books for rental: ")
+    print(table)
+  
+  
+# define a function for selected book      
+def selected_book(books):
+    book_id = input("Please enter the book ID you want to borrow: ")
+    # create a selected_book dictionary to store the selected book
+    selected_book = {}
+    for book in books:
+            if book["id"] == book_id:
+                selected_book = book
+                break 
+    if not selected_book:
+        print("Sorry, the book is not available in our online store. Please try again later.")
+        
+    elif selected_book["status"] == "unavailable":
+        print(f"Sorry, the book is unavailable for rental. It will be available from {selected_book['due_date']}.")  
+        return
 
+    return selected_book        
 
+# define a function to borrow a book
 
+def borrow_book(selected_book, book_id):
+    confirm_borrow = input("Do you want to borrow this book? (y/n): ")
+    if confirm_borrow == "y":
+        print("Please enter your information: ")
+        name = input("Name: ")
+        address = input("Address: ")
+        phone = input("Phone: ")
+        email = input("Email: ")
+        deposit = selected_book["price"]*0.2
+        # create a receipt dictionary to store the receipt information
+        receipts = [{"name": name, "address": address, "phone": phone, "email": email, "book_id": book_id, "book_name": selected_book["name"], "borrow_date": now.date(), "due_date": booked_due_date, "deposit": selected_book["price"]*0.2}]
+        print(f"Thank you for borrowing {selected_book['name']}. Here is your receipt.")
+        
+        # create a table to display receipt information
+        receipts_table = PrettyTable(["Name", "Address", "Phone", "Email", "Book ID", "Book Name", "Borrow Date", "Due Date", "Deposit"])
+        for receipt in receipts:
+            receipts_table.add_row([receipt["name"], receipt["address"], receipt["phone"], receipt["email"], receipt["book_id"], receipt["book_name"], receipt["borrow_date"], receipt["due_date"], receipt["deposit"]])
+        print(receipts_table)
+        
+        # update the selected book status and due date
+        selected_book["status"] = "unavailable"
+        selected_book["due_date"] = booked_due_date
+    
+    else:
+        return
+        
+ 
+ 
+            
 while True:
     print("\nWelcome to our online book rental service. Please choose your service type:")
     print("1. Borrow a book")
@@ -46,48 +101,14 @@ while True:
     choice = input("Please enter your choice: ")
     
     if choice == '1':
-        table.clear_rows()
-        for book in books:
-            row=[book["id"], book["name"], book["author"], book["price"], book["status"], book["due_date"], book["book_rate"]]
-            table.add_row(row)
-        print("\nHere is the list of books for rental: ")
-        print(table)
-        book_id = input("Please enter the book ID you want to borrow: ")
-        # create a selected_book dictionary to store the selected book
-        selected_book = {}
-        for book in books:
-            if book["id"] == book_id:
-                selected_book = book
-                break
-            
-        if not selected_book:
-            print("Sorry, the book is not available in our online store. Please try again later.")
+        display_books(books)
+        selected_book_info= selected_book(books)
+        if selected_book_info:
+            borrow_book(selected_book_info, selected_book_info["id"])
+        
+    
 
-        elif selected_book["status"] == "available":
-            confirm_borrow = input("Do you want to borrow this book? (y/n): ")
-            if confirm_borrow == "y":
-                print("Please enter your information: ")
-                name = input("Name: ")
-                address = input("Address: ")
-                phone = input("Phone: ")
-                email = input("Email: ")
-                deposit = selected_book["price"]*0.2
-                # create a receipt dictionary to store the receipt information
-                receipts = [{"name": name, "address": address, "phone": phone, "email": email, "book_id": book_id, "book_name": selected_book["name"], "borrow_date": now.date(), "due_date": booked_due_date, "deposit": selected_book["price"]*0.2}]
-                print(f"Thank you for borrowing {selected_book['name']}. Here is your receipt.")
-                
-                # create a table to display receipt information
-                receipts_table = PrettyTable(["Name", "Address", "Phone", "Email", "Book ID", "Book Name", "Borrow Date", "Due Date", "Deposit"])
-                for receipt in receipts:
-                    receipts_table.add_row([receipt["name"], receipt["address"], receipt["phone"], receipt["email"], receipt["book_id"], receipt["book_name"], receipt["borrow_date"], receipt["due_date"], receipt["deposit"]])
-                print(receipts_table)
-                
-                # update the selected book status and due date
-            selected_book["status"] = "unavailable"
-            selected_book["due_date"] = booked_due_date
-            books.append(selected_book)
-        else:
-            print(f"Sorry, the book is unavailable for rental. It will be available from {selected_book['due_date']}.")
+       
 
             
               
