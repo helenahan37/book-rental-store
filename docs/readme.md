@@ -1,0 +1,1 @@
+regex_email ref https://stackabuse.com/python-validate-email-address-with-regular-expressions-regex/
