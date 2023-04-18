@@ -135,7 +135,7 @@ def borrow_book(selected_book, book_id):
         selected_book["receipt_number"] = receipt_number
     
     else:
-        return
+        return None
         
 # ===================================define a function to return a book===============================================================
 
@@ -157,7 +157,7 @@ def return_book(books):
             break   
     else: 
         print ("\n Sorry, the receipt number you have entered is not correct. Please try again.")
-        return 
+        return None
         
     return return_book
         
@@ -184,14 +184,12 @@ while True:
         display_books(books)
         return_book_info = return_book(books)
         if return_book_info != None:
-            updated_book = return_book_info
-            if updated_book:
-                print("\nUpdated book list:")
-                display_books(books)
+            print("\nUpdated book rate:")
+            display_books(books)
         
     
 
        
-
+ß
             
               
