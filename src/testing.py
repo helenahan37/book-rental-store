@@ -1,98 +1,173 @@
-# 写一个网上租书店的终端小程序，程序需要包含3个特色，
-# The program should present the customer with a list of services to choose from: 1. Borrow a book, 2. Return a book, 3. Quit.
-# 1. If the customer selects "Borrow a book," the program should print out a list of available books, their due dates, and whether they are available for rental. The program should then collect the customer's information and print a receipt that includes the customer's name,
-# the date the book was borrowed, the due date, and the deposit amount.
-# 2.If the customer selects "Return a book," the program should prompt the customer to enter the receipt number for the book being returned. The program should then print out the amount due for the book and refund the deposit.
-import datetime
+# import datetime
+# from prettytable import PrettyTable
+# import re
+# import uuid
 
-# define a book list
-books = [
-    {'id': '001', 'name': 'Python Crash Course', 'author': 'Eric Matthes', 'price': 49.9, 'status': 'available', 'due_date': None},
-    {'id': '002', 'name': 'Web Scraping with Python', 'author': 'Ryan Mitchell', 'price': 69.9, 'status': 'unavailable', 'due_date': '2022-04-20'},
-    {'id': '003', 'name': 'Python Data Science Handbook', 'author': 'Jake VanderPlas', 'price': 99.0, 'status': 'available', 'due_date': None},
-    {'id': '004', 'name': 'Expert Python Programming', 'author': 'Tarek Ziade', 'price': 79.0, 'status': 'available', 'due_date': None},
-    {'id': '005', 'name': 'Python Network Programming', 'author': 'Dr. M. O. Faruque Sarker', 'price': 59.9, 'status': 'unavailable', 'due_date': '2022-04-22'}
-]
+# class BookStore:
+    
+#     def __init__(self):
+#         self.books = [
+#             {"id": "001", "name": "Python Crash Course", "author": "Eric Matthes", "rental_price": 19.90, "status": "available", "due_date": None, "book_rate": 4.8, "receipt_number": "None"},
+#             {"id": "002", "name": "Web Scraping with Python", "author": "Ryan Mitchell", "rental_price": 19.00, "status": "unavailable", "due_date": "2023-04-22", "book_rate": 4.5, "receipt_number": 56},
+#             {"id": "003", "name": "Python Data Science Handbook", "author": "Jake VanderPlas", "rental_price": 22.0, "status": "available", "due_date": None, "book_rate": 4.3, "receipt_number": "None"},
+#             {"id": "004", "name": "Expert Python Programming", "author": "Tarek Ziade", "rental_price": 15.90, "status": "available", "due_date": None, "book_rate": 3.8, "receipt_number": "None"},
+#             {"id": "005", "name": "Python Network Programming", "author": "Dr. M. O. Faruque Sarker", "rental_price": 23.50, "status": "unavailable", "due_date": "2023-04-23", "book_rate": 4.0, "receipt_number": 37}
+#         ]
 
+#         self.now = datetime.datetime.now()
 
-# define a receipt list
-receipts = {}
+#         # change the due date manually input from string to date
+#         for book in self.books:
+#             if book ["due_date"]:
+#                 book ["due_date"] = datetime.datetime.strptime(book ["due_date"], "%Y-%m-%d").date()
 
-# obtain current date
-now = datetime.datetime.now()
+#         # email and phone regex
+#         self.email_regex = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
+        
+#     def validate_email(self):
+#         while True:
+#             email = input("Email: ")
+#             if not self.email_regex.match(email):
+#                 print("Sorry, the email address you have entered is not valid, please try again, format: (username)@(domainname).(top-leveldomain).")
+#             else:
+#                 return email
 
-while True:
-    print("\nWelcome to our online book rental service. Please choose your service type:")
-    print("1. Borrow a book")
-    print("2. Return a book")
-    print("3. Exit the program")
+#     def display_books(self):
+#         # define a table to display book list 
+#         table = PrettyTable(["ID", "Name", "Author", "Rental Price", "Status", "Due Date", "Book Rate", "Receipt Number"])
+#         for book in self.books:
+#             row=[book["id"], book["name"], book["author"], book["rental_price"], book["status"], book["due_date"], book["book_rate"], book["receipt_number"]]
+#             table.add_row(row)
+#         print("\nHere is the list of books for rental: ")
+#         print(table)
 
-    # obtain user input
-    choice = input('请输入数字选择服务类型：')
+#     def selected_book(self, book_id):
+#         # create a selected_book dictionary to store the selected book
+#         selected_book = {}
+#         for book in self.books:
+#             if book["id"] == book_id:
+#                 selected_book = book
+#             break
+#         return selected_book
+    
+# class Book:
+#     def __init__(self, id, name, author, rental_price, status="available", due_date=None):
+#         self.id = id
+#         self.name = name
+#         self.author = author
+#         self.rental_price = rental_price
+#         self.status = status
+#         self.due_date = due_date
+    
+#     def __str__(self):
+#         return f"Book ID: {self.id}, Book Name: {self.name}, Author: {self.author}, Rental Price: {self.rental_price}, Status: {self.status}, Due Date: {self.due_date}"
 
-    if choice == '1':  # 借书
-        print('\n当前书籍列表如下:')
+# class Receipt:
+#     def __init__(self, name, address, phone, email, book_id, book_name, borrow_date, due_date, deposit, receipt_number):
+#         self.name = name
+#         self.address = address
+#         self.phone = phone
+#         self.email = email
+#         self.book_id = book_id
+#         self.book_name = book_name
+#         self.borrow_date = borrow_date
+#         self.due_date = due_date
+#         self.deposit = deposit
+#         self.receipt_number = receipt_number
+    
+#     def __str__(self):
+#         return f"Receipt Number: {self.receipt_number}, Name: {self.name}, Address: {self.address}, Phone: {self.phone}, Email: {self.email}, Book ID: {self.book_id}, Book Name: {self.book_name}, Borrow Date: {self.borrow_date}, Due Date: {self.due_date}, Deposit: {self.deposit}"
 
-        print('编号\t书名\t\t\t\t\t作者\t\t状态\t\t可借日期')
+# class BookRentalService:
+#     def __init__(self, books):
+#         self.books = books
+#         self.receipts = []
+    
+#     def display_books(self):
+#         # create a table to display the books
+#         books_table = PrettyTable()
+#         books_table.field_names = ["ID", "Name", "Author", "Rental Price", "Status"]
+#         for book in self.books:
+#             books_table.add_row([book.id, book.name, book.author, book.rental_price, book.status])
+#         print(books_table)
 
-        # 遍历书籍列表，打印书籍信息
-        for book in books:
-            print(f'{book["id"]}\t{book["name"]}\t\t{book["author"]}\t{book["status"]}\t{book["due_date"] or "N/A"}')
+#     def select_book(self):
+#         # obtain user input2
+#         book_id = input("\nPlease enter the ID of the book you want to rent: ")
+#         now = datetime.now()
+        
+#         # check if the book is available for rental
+#         for book in self.books:
+#             if book.id == book_id:
+#                 if book.status == "available":
+#                     booked_due_date = now.date() + timedelta(days=14)
+#                     book.status = "unavailable"
+#                     book.due_date = booked_due_date
+#                     book.receipt_number = int(str(uuid.uuid4().hex)[:2])
+#                     selected_book = book.__dict__
+#                     selected_book["due_date"] = str(selected_book["due_date"])
+#                     print(f"\nYou have selected {selected_book['name']}. The rental price is {selected_book['rental_price']}. You need to pay a deposit of {selected_book['rental_price']*0.2}. The book is due on {selected_book['due_date']}.")
+#                     return selected_book
+#                 else:
+#                     booked_due_date = book.due_date
+#                     available_days = booked_due_date - now.date()
+#                     print(f"\nSorry, the book is unavailable for rental currently. It will be available from {book.due_date}, {available_days.days} days from today.")
+#                     return None
 
-        # 获取用户输入
-        book_id = input('请输入要借阅的书籍编号：')
-        name = input('请输入您的姓名：')
-        phone_number = input('请输入您的联系电话：')
-        address = input('请输入您的家庭住址：')
-
-        # 查找书籍信息
-        book = None
-        for b in books:
-            if b['id'] == book_id:
-                book = b
-                break
-
-        if book is None:
-            print('对不起，没有找到您想借阅的书籍。')
-        elif book['status'] == 'unavailable':
-            due_date = datetime.datetime.strptime(book['due_date'], '%Y-%m-%d')
-            days_left = (due_date - now).days
-            if days_left > 0:
-                print(f'对不起，该书籍于{book["due_date"]}后可借')
-                
-        elif book is not None and book['status'] == 'available':
-    # 更新书籍状态和借出日期
-            book['status'] = 'unavailable'
-            book['due_date'] = (now + datetime.timedelta(days=14)).strftime('%Y-%m-%d')
-
-    # 生成收据编号
-            receipt_id = len(receipts) + 1
-
-    # 计算押金金额
-            deposit = 0.2 * book['price']
-
-            print('\n您已成功借阅以下书籍:')
-            print(f'书籍名称：{book["name"]}')
-            print(f'借出日期：{now.strftime("%Y-%m-%d")}')
-            print(f'归还日期：{book["due_date"]}')
-            print(f'押金金额：{deposit:.2f}元')
+#     def borrow_book(self, selected_book):
+#         # obtain user input3
+#         confirm_borrow = input("\nThe book is currently available, do you want to borrow this book? (y/n): ")
+#         if confirm_borrow == "y":
+#             print("\nPlease enter your information: ")
+#             name = input("Name: ")
+#             address = input("Address: ")
+#             phone = input("Phone: ")
+#             email = self.validate_email()
+#             deposit = selected_book["rental_price"]*0.2
+#             # create a receipt dictionary to store the receipt information
+#             receipts = {}
+#             receipts = [{"name": name, "address": address, "phone": phone, "email": email, "book_id": selected_book["id"], "book_name": selected_book["name"], "borrow_date": now.date(), "due_date": booked_due_date, "deposit": selected_book["rental_price"]*0.2}]
+#             print(f"\nThank you for borrowing {selected_book['name']}. Here is your receipt.")
             
-            receipts[receipt_id] = {
-                'book_name': book['name'],
-                'borrower_name': name,
-                'phone_number': phone_number,
-                'address': address,
-                'borrow_date': now.strftime("%Y-%m-%d"),
-                'return_date': book["due_date"],
-                'deposit_amount': deposit
-            }
+#             # create a table to display receipt information
+#             receipts_table = PrettyTable()
+#             receipts_table.field_names = [f"Receipt Number: {book.receipt_number}", "Information"]
+#             for receipt in receipts:
+#                 receipts_table.add_row(["Name:", receipt["name"]])
+#                 receipts_table.add_row(["Address:", receipt["address"]])
+#                 receipts_table.add_row(["Phone:", receipt["phone"]])
+#                 receipts_table.add_row(["Email:", receipt["email"]])
+#                 receipts_table.add_row(["Book ID:", receipt["book_id"]])
+#                 receipts_table.add_row(["Book Name:", receipt["book_name"]])
+#                 receipts_table.add_row(["Borrow Date:", receipt["borrow_date"]])
+#                 receipts_table.add_row(["Due Date:", receipt["due_date"]])
+#                 receipts_table.add_row(["Deposit:", receipt["deposit"]])
+#             print(receipts_table.get_string())
 
-            print('\n收据编号:', receipt_id)
-            print('书籍名称：', book['name'])
-            print('借阅人姓名：', name)
-            print('联系电话：', phone_number)
-            print('家庭住址：', address)
-            print('借出日期：', now.strftime("%Y-%m-%d"))
-            print('归还日期：', book["due_date"])
-            print(f'押金金额：{deposit:.2f}元')
+#             # update the selected book status and due date
+#             selected_book["status"] = "unavailable"
+#             selected_book["due_date"] = booked_due_date
+#             selected_book["receipt_number"] = book.receipt_number
+            
+#         else:
+#             return None
+
+#         return selected_book
+    
+                
+# while True:
+#     print("\nWelcome to our online book rental service. Please choose your service type:")
+#     print("1. Borrow a book")
+#     print("2. Return a book")
+#     print("3. Add a wish list book")
+#     print("4. Exit the program")
+
+#     # obtain user input1
+#     choice = input("Please enter your choice: ")
+    
+#     if choice == '1':
+#         display_books(books)
+#         selected_book_info = selected_book(books)
+#         if selected_book_info != None:
+#             borrow_book(selected_book_info, selected_book_info["id"])
     
