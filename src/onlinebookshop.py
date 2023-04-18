@@ -69,7 +69,10 @@ def display_books(books):
 def selected_book(books):
  
     book_id = input("\nPlease enter the book ID you are interested: ")
-        
+    if not book_id.isdigit() or len(book_id) != 3:
+        print("\nSorry, the book ID you have entered is not valid, please enter a valid 3-digit integer ID.")
+        return None
+    
     # create a selected_book dictionary to store the selected book
     selected_book = {}
     for book in books:
@@ -95,7 +98,7 @@ def selected_book(books):
 
 def borrow_book(selected_book, book_id):
     # define a receipt number
-    receipt_count = 23
+    receipt_count = 1
     def receipt_number():
         global receipt_count
         receipt_count += 1
@@ -154,7 +157,14 @@ def return_book(books):
             book["due_date"] = None
             book["receipt_number"] = None
              # calculate the average book rate
-            current_book_rate = float(input("\nPlease rate the book you have borrowed: "))
+            try:
+                current_book_rate = float(input("\nPlease rate the book you have borrowed: "))
+                if current_book_rate == 0:
+                    raise ValueError
+                break
+            except ValueError:
+                print("\nInvalid input. Please enter a non-zero number.")
+                
             average_rate = (book["book_rate"] + current_book_rate)/2
             book["book_rate"] = format(average_rate, '.2f')
             break   
@@ -185,10 +195,9 @@ while True:
     # obtain user input2
     elif choice == '2':
         display_books(books)
-        return_book_info = return_book(books)
-        if return_book_info != None:
-            print("\nUpdated book rate:")
-            display_books(books)
+        return_book(books)
+        print("\nUpdated book list:")
+        display_books(books)
         
     
 
