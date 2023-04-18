@@ -140,11 +140,14 @@ def borrow_book(selected_book, book_id):
 # ===================================define a function to return a book===============================================================
 
 def return_book(books):
-    return_receipt_number = str(input("\n Please enter your receipt number: "))
-    return_book = {}
+    try:
+        return_receipt_number = int(input("\n Please enter your receipt number: "))
+    except ValueError:
+        print("Invalid receipt number. Please enter a valid integer.")
+        return None
+    
     for book in books:
-        if book["receipt_number"] == return_receipt_number:
-            return_book = book
+        if book["receipt_number"] == str(return_receipt_number):
             print(f"\nThank you for returning {book['name']}.")
             # update the book status and due date
             book["status"] = "available"
@@ -159,7 +162,7 @@ def return_book(books):
         print ("\n Sorry, the receipt number you have entered is not correct. Please try again.")
         return None
         
-    return return_book
+    return book
         
             
 while True:
