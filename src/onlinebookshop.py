@@ -26,7 +26,7 @@ books = [
     {"id": "005", "name": "Python Network Programming", "author": "Dr. M. O. Faruque Sarker", "rental_price": 23.50, "status": "unavailable", "due_date": "2023-04-23", "book_rate": 4.0, "receipt_number": 24}
 ]
 
-# change the due date and receipt number manually input from string to date
+# change the due date and receipt number manually input from string to date format
 for book in books:
     if book ["due_date"]:
         book ["due_date"] = datetime.datetime.strptime(book ["due_date"], "%Y-%m-%d").date()
@@ -38,13 +38,17 @@ for book in books:
 now = datetime.datetime.now()
 
 
-# calculate the waiting date between current date and due date
+# calculate the due date
 booked_due_date = now.date() + datetime.timedelta(days=7)
 
 
-# email and phone regex
+#Regex
+
 email_regex = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
 phone_regex = re.compile(r'^0\d{9}$')
+name_regex = re.compile(r'^[A-Za-z][A-Za-z_.\s]{7,29}$')
+addess_regex = re.compile(r'^[\d\s\w]+$')
+
 
 # define a function to validate email
 def validate_email():
@@ -64,10 +68,25 @@ def validate_phone():
         else:
             return phone
             
+# define a function to validate name
+def validate_name():
+    while True:
+        name = input("Name: ")
+        if not name_regex.match(name):
+            print("\nSorry, the name you have entered is not valid, please try again, format: 8-30 characters, only letters, space, dot and underscore.")
+        else:
+            return name
+        
+        
+def validate_address():
+    while True:
+        address = input("Address: ")
+        if not addess_regex.match(address):
+            print("\nSorry, the address you have entered is not valid, please try again, format: only letters, numbers and space.")
+        else:
+            return address
+
 # define a function to display book list
-
-# This function displays the details of each book in the given list of books.
-
 def display_books(books):
  # define a table to display book list 
     table = PrettyTable(["ID", "Name", "Author", "Rental Price", "Status", "Due Date", "Book Rate", "Receipt Number"])
@@ -123,8 +142,8 @@ def borrow_book(selected_book, book_id):
     confirm_borrow = input("\nThe book is currently available, do you want to borrow this book? (y/n): ")
     if confirm_borrow == "y":
         print("\nPlease enter your information: ")
-        name = input("Name: ")
-        address = input("Address: ")
+        name = validate_name()
+        address = validate_address()
         email =validate_email()
         phone = validate_phone()
         # create a receipt dictionary to store the receipt information
@@ -156,7 +175,7 @@ def borrow_book(selected_book, book_id):
     else:
         return None
         
-# ===================================define a function to return a book===============================================================
+# ===================================Return Book Function===============================================================
 
 def return_book(books):
 # This function prompts the user to enter the receipt number of the book being returned,
