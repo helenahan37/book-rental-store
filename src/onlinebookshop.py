@@ -30,8 +30,7 @@ books = [
 for book in books:
     if book ["due_date"]:
         book ["due_date"] = datetime.datetime.strptime(book ["due_date"], "%Y-%m-%d").date()
-    if book ["receipt_number"]:
-        book ["receipt_number"] = str(book["receipt_number"])
+
 
 # obtain current date
 now = datetime.datetime.now()
@@ -49,7 +48,7 @@ def validate_email():
     while True:
         email = input("Email: ")
         if not email_regex.match(email):
-            print("Sorry, the email address you have entered is not valid, please try again, format: (username)@(domainname).(top-leveldomain).")
+            print("\nSorry, the email address you have entered is not valid, please try again, format: (username)@(domainname).(top-leveldomain).")
         else:
             return email
         
@@ -67,11 +66,12 @@ def display_books(books):
   
 # define a function for selected book      
 def selected_book(books):
- 
-    book_id = input("\nPlease enter the book ID you are interested: ")
-    if not book_id.isdigit() or len(book_id) != 3:
-        print("\nSorry, the book ID you have entered is not valid, please enter a valid 3-digit integer ID.")
-        return None
+    while True: 
+        book_id = input("\nPlease enter the book ID you are interested: ")
+        if not book_id.isdigit() or len(book_id) != 3:
+            print("\nSorry, the book ID you have entered is not valid, please enter a valid 3-digit integer ID.")
+        else:
+            break
     
     # create a selected_book dictionary to store the selected book
     selected_book = {}
@@ -83,7 +83,6 @@ def selected_book(books):
         print("\nSorry, the book ID you have entered is not list in our online store. If you would like to add a new book, please press option 3.")
         return None
     
-
     elif selected_book["status"] == "unavailable":
         booked_due_date = selected_book["due_date"]
         available_days = booked_due_date - now.date()
@@ -102,8 +101,7 @@ def borrow_book(selected_book, book_id):
     def receipt_number():
         global receipt_count
         receipt_count += 1
-        return receipt_count
-    receipt_number = str(receipt_count).zfill(2)
+    receipt_number = receipt_count
     confirm_borrow = input("\nThe book is currently available, do you want to borrow this book? (y/n): ")
     if confirm_borrow == "y":
         print("\nPlease enter your information: ")
@@ -143,36 +141,37 @@ def borrow_book(selected_book, book_id):
 # ===================================define a function to return a book===============================================================
 
 def return_book(books):
-    try:
-        return_receipt_number = int(input("\n Please enter your receipt number: "))
-    except ValueError:
-        print("Invalid receipt number. Please enter a valid integer.")
-        return None
-    
+    while True:
+        try:
+            return_receipt_number = int(input("\nPlease enter your receipt number: "))
+            break
+        except ValueError:
+            print("\nInvalid input. Please enter a valid number.")
+
     for book in books:
-        if book["receipt_number"] == str(return_receipt_number):
+        if book["receipt_number"] == return_receipt_number:
             print(f"\nThank you for returning {book['name']}.")
-            # update the book status and due date
-            book["status"] = "available"
-            book["due_date"] = None
-            book["receipt_number"] = None
-             # calculate the average book rate
-            try:
-                current_book_rate = float(input("\nPlease rate the book you have borrowed: "))
-                if current_book_rate == 0:
-                    raise ValueError
-                break
-            except ValueError:
-                print("\nInvalid input. Please enter a non-zero number.")
-                
-            average_rate = (book["book_rate"] + current_book_rate)/2
-            book["book_rate"] = format(average_rate, '.2f')
-            break   
-    else: 
-        print ("\n Sorry, the receipt number you have entered is not correct. Please try again.")
-        return None
-        
-    return book
+            
+        # validate the book rate
+            while True:
+                try:
+                    current_book_rate = float(input("\nPlease rate the book you have borrowed: "))
+                    if current_book_rate <= 0 or current_book_rate > 5:
+                        raise ValueError
+                except ValueError:
+                    print("\nInvalid input. Please enter a non-zero number (from 1-5)")
+                else:     
+                    # update the book info
+                    average_rate = (book["book_rate"] + current_book_rate)/2
+                    book["book_rate"] = format(average_rate, '.1f')
+                    book["status"] = "available"
+                    book["due_date"] = None
+                    book["receipt_number"] = None
+                    return book  
+       
+    print("\nThe number you entered is not in the list. Please check your receipt number.")
+
+    return None
         
             
 while True:
@@ -183,7 +182,7 @@ while True:
     print("4. Exit the program")
 
     # obtain user input1
-    choice = input("Please enter your choice: ")
+    choice = input("\nPlease enter your choice: ")
     
     if choice == '1':
         display_books(books)
@@ -195,13 +194,15 @@ while True:
     # obtain user input2
     elif choice == '2':
         display_books(books)
-        return_book(books)
-        print("\nUpdated book list:")
-        display_books(books)
-        
+        return_book_list= return_book(books)
+        if return_book_list != None:
+            print(f"\nThank you for updating {book['name']}'s rate!")
+            print("\nUpdated book list:")
+            display_books(books)
+     
     
 
        
-ß
+
             
               
