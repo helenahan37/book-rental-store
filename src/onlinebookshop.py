@@ -32,16 +32,18 @@ for book in books:
         book ["due_date"] = datetime.datetime.strptime(book ["due_date"], "%Y-%m-%d").date()
 
 
+
 # obtain current date
 now = datetime.datetime.now()
 
 
-# define a function to calculate the waiting date between current date and due date
+# calculate the waiting date between current date and due date
 booked_due_date = now.date() + datetime.timedelta(days=7)
 
 
 # email and phone regex
 email_regex = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
+phone_regex = re.compile(r'^0\d{9}$')
 
 # define a function to validate email
 def validate_email():
@@ -52,7 +54,15 @@ def validate_email():
         else:
             return email
         
-        
+# define a function to validate phone number
+def validate_phone():
+    while True:
+        phone = input("Phone: ")
+        if not phone_regex.match(phone):
+            print("\nSorry, the phone number you have entered is not valid, please try again, format: 10-digit phone number start from 0.")
+        else:
+            return phone
+            
 # define a function to display book list
 def display_books(books):
  # define a table to display book list 
@@ -107,11 +117,11 @@ def borrow_book(selected_book, book_id):
         print("\nPlease enter your information: ")
         name = input("Name: ")
         address = input("Address: ")
-        phone = input("Phone: ")
         email =validate_email()
+        phone = validate_phone()
         # create a receipt dictionary to store the receipt information
         receipts = {}
-        receipts = [{"name": name, "address": address, "phone": phone, "email": email, "book_id": book_id, "book_name": selected_book["name"], "borrow_date": now.date(), "due_date": booked_due_date, "deposit": selected_book["rental_price"]*0.2}]
+        receipts = [{"name": name, "address": address, "phone": phone, "email": email, "book_id": book_id, "book_name": selected_book["name"], "borrow_date": now.date(), "due_date": booked_due_date, "deposit": round(selected_book["rental_price"] * 0.2, 2)}]
         print(f"\nThank you for borrowing {selected_book['name']}. Here is your receipt.")
         
         # create a table to display receipt information
@@ -163,17 +173,26 @@ def return_book(books):
                 else:     
                     # update the book info
                     average_rate = (book["book_rate"] + current_book_rate)/2
-                    book["book_rate"] = format(average_rate, '.1f')
+                    book["book_rate"] = str(format(average_rate, '.1f'))
                     book["status"] = "available"
                     book["due_date"] = None
                     book["receipt_number"] = None
-                    return book  
+   
+                    return book,return_receipt_number
        
     print("\nThe number you entered is not in the list. Please check your receipt number.")
 
-    return None
+    return None, None
         
-            
+# calculate the due balance
+def display_due_balance_table(book, return_receipt_number):
+    deposit = round(book["rental_price"] * 0.2, 2)
+    due_balance = book["rental_price"]-deposit
+    print(f"\nYour due balance is: {due_balance:.2f}")
+    due_balance_table = PrettyTable(["Receipt Number", "Rental Price", "Deposit", "Due Balance"])
+    due_balance_table.add_row([return_receipt_number, book["rental_price"], deposit, due_balance])
+    print(due_balance_table)
+
 while True:
     print("\nWelcome to our online book rental service. Please choose your service type:")
     print("1. Borrow a book")
@@ -194,11 +213,14 @@ while True:
     # obtain user input2
     elif choice == '2':
         display_books(books)
-        return_book_list= return_book(books)
-        if return_book_list != None:
+        return_book_list, return_receipt_number= return_book(books)
+        if return_book_list or return_receipt_number!= None:
             print(f"\nThank you for updating {book['name']}'s rate!")
             print("\nUpdated book list:")
             display_books(books)
+            print("\nPlease pay your due balance:")
+            display_due_balance_table(book, return_receipt_number)
+            print("\nThank you for using our online book rental service. Have a nice day!")
      
     
 
