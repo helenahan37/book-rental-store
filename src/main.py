@@ -44,7 +44,7 @@ booked_due_date = now.date() + datetime.timedelta(days=7)
 email_regex = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
 phone_regex = re.compile(r'^0\d{9}$')
 name_regex = re.compile(r'^[A-Za-z][A-Za-z_.\s]{7,29}$')
-addess_regex = re.compile(r'^[\d\s\w]{5,50}$')
+address_regex = re.compile(r'^[\d\s\w]{5,50}$')
 
 
 # define a function to validate email
@@ -78,7 +78,7 @@ def validate_name():
 def validate_address():
     while True:
         address = input("Address: ")
-        if not addess_regex.match(address):
+        if not address_regex.match(address):
             print("\nSorry, the address you have entered is not valid, please try again, format: 5-50 characters, only letters, numbers and space.")
         else:
             return address
@@ -95,7 +95,7 @@ def display_books(books):
   
   
 # define a function for selected book      
-def selected_book(books):
+def select_book(books):
     # This function prompts the user to select a book from the given list of books
     # and returns the details of the selected book.
     while True: 
@@ -120,11 +120,29 @@ def selected_book(books):
         available_days = booked_due_date - now.date()
      
         print(f"\nSorry, the book is unavailable for rental currently. It will be available from {selected_book['due_date']}, {available_days.days} days from today.")  
-        return None 
+        return None
 
     return selected_book        
 
 # ================================ Borrow book function ==============================================
+
+
+# define a function enable users to reiterate the book list
+def browse_books():
+    while True:
+        confirm_browse = input("\nDo you want to continue to browse our book list? (y/n): ").lower()
+        if confirm_browse not in ["y", "n"]:
+            print("\nSorry, the option you have entered is not valid, please enter 'y' or 'n'.")
+        elif confirm_browse == "y":
+            display_books(books)
+            choose_book = select_book(books)
+            if choose_book != None:
+                borrow_book(choose_book, choose_book["id"])
+                return True
+        else:
+            print("\nThank you for using our online book rental service. See you next time!")
+            break     
+       
 # define a receipt number
 receipt_count = 11
 def generate_receipt_number():
@@ -133,54 +151,59 @@ def generate_receipt_number():
     return receipt_count
 
 def borrow_book(selected_book, book_id):
-# This function updates the availability of the selected book to False and
-# returns a receipt number for the transaction.
-   
-    confirm_borrow = input("\nThe book is currently available, do you want to borrow this book? (y/n): ")
-    if confirm_borrow == "y":
-        print("\nPlease enter your information: ")
-        name = validate_name()
-        address = validate_address()
-        email =validate_email()
-        phone = validate_phone()
-        # create a receipt dictionary to store the receipt information
-        receipts = {}
-        receipts = [{"name": name, "address": address, "phone": phone, "email": email, "book_id": book_id, "book_name": selected_book["name"], "borrow_date": now.date(), "due_date": booked_due_date, "deposit": round(selected_book["rental_price"] * 0.2, 2)}]
-        print(f"\nThank you for borrowing {selected_book['name']}. Here is your receipt.")
-        
-        # create a table to display receipt information
-        receipts_table = PrettyTable()
-        receipt_num = generate_receipt_number()
-        receipts_table.field_names = [f"Receipt Number: {receipt_num}", "Information"]
-        for receipt in receipts:
-            receipts_table.add_row(["Name:", receipt["name"]])
-            receipts_table.add_row(["Address:", receipt["address"]])
-            receipts_table.add_row(["Phone:", receipt["phone"]])
-            receipts_table.add_row(["Email:", receipt["email"]])
-            receipts_table.add_row(["Book ID:", receipt["book_id"]])
-            receipts_table.add_row(["Book Name:", receipt["book_name"]])
-            receipts_table.add_row(["Borrow Date:", receipt["borrow_date"]])
-            receipts_table.add_row(["Due Date:", receipt["due_date"]])
-            receipts_table.add_row(["Deposit:", receipt["deposit"]])
-        print(receipts_table.get_string())
+# This function updates the information of the selected book and
+# print a receipt number for the transaction.
+    continue_borrowing = True
+    while continue_borrowing and selected_book["status"] == "available":
+        confirm_borrow = input("\nThe book is currently available, do you want to borrow this book? (y/n): ").lower()   
+        if confirm_borrow not in ["y", "n"]:
+            print("\nSorry, the option you have entered is not valid, please enter 'y' or 'n'.")
+        elif confirm_borrow == "y":
+            print ("\nPlease enter your personal information to complete the transaction.")
+            name = validate_name()
+            address = validate_address()
+            email =validate_email()
+            phone = validate_phone()
+            # create a receipt dictionary to store the receipt information
+            receipts = {}
+            receipts = [{"name": name, "address": address, "phone": phone, "email": email, "book_id": book_id, "book_name": selected_book["name"], "borrow_date": now.date(), "due_date": booked_due_date, "deposit": round(selected_book["rental_price"] * 0.2, 2)}]
+            print(f"\nThank you for borrowing {selected_book['name']}. Here is your receipt.")
 
-        
-        # update the selected book status and due date
-        selected_book["status"] = "unavailable"
-        selected_book["due_date"] = booked_due_date
-        selected_book["receipt_number"] = receipt_num
+            # create a table to display receipt information
+            receipts_table = PrettyTable()
+            receipt_num = generate_receipt_number()
+            receipts_table.field_names = [f"Receipt Number: {receipt_num}", "Information"]
+            for receipt in receipts:
+                receipts_table.add_row(["Name:", receipt["name"]])
+                receipts_table.add_row(["Address:", receipt["address"]])
+                receipts_table.add_row(["Phone:", receipt["phone"]])
+                receipts_table.add_row(["Email:", receipt["email"]])
+                receipts_table.add_row(["Book ID:", receipt["book_id"]])
+                receipts_table.add_row(["Book Name:", receipt["book_name"]])
+                receipts_table.add_row(["Borrow Date:", receipt["borrow_date"]])
+                receipts_table.add_row(["Due Date:", receipt["due_date"]])
+                receipts_table.add_row(["Deposit:", receipt["deposit"]])
+            print(receipts_table.get_string())
+
+            # update the selected book status and due date
+            selected_book["status"] = "unavailable"
+            selected_book["due_date"] = booked_due_date
+            selected_book["receipt_number"] = receipt_num
+            return receipt_num
+        else:
+            continue_borrowing = browse_books()
+            break
+            
     
-    else:
-        return None
-    return receipt_num
+  
+
 # ===================================Return Book Function===============================================================
 
 def return_book(books):
 
-
-# This function prompts the user to enter the receipt number of the book being returned,
-# and sets the book's availability to True. It returns the book details and receipt number.
-
+#This function asks the user to input the receipt number to return the book, 
+# and also prompts them to rate the book they borrowed. Additionally, 
+# it can display a table showing the deposit paid and the remaining balance that the client needs to pay for the book.
 
     while True:
         try:
@@ -199,7 +222,9 @@ def return_book(books):
                     current_book_rate = float(input("\nPlease rate the book you have borrowed: "))
                     if current_book_rate <= 0 or current_book_rate > 5:
                         raise ValueError
-                except ValueError:
+                except ValueError as e:
+                    print(e)
+                    print(type(e))
                     print("\nInvalid input. Please enter a non-zero number (from 1-5)")
                     
                 else:     
@@ -219,9 +244,9 @@ def return_book(books):
                     due_balance_table.add_row([return_receipt_number, book["rental_price"], f"{deposit:.2f}", "{:.2f}".format(due_balance)])
                     print(due_balance_table)
                     return book
-    print("\nThe number you entered is not in the list. Please check your receipt number.")
+    print("\nThe number you entered is not in the list. Please check your receipt for correct receipt number!")
 
-    return None, None
+    return None
         
 # =============================================Add Book Function===============================================================
 
@@ -238,9 +263,9 @@ while True:
     
     if choice == '1':
         display_books(books)
-        selected_book_info = selected_book(books)
-        if selected_book_info != None:
-            borrow_book(selected_book_info, selected_book_info["id"])
+        selected_book = select_book(books)
+        if selected_book != None:
+            borrow_book(selected_book, selected_book["id"])
             
             
     # obtain user input2
