@@ -20,20 +20,17 @@ import re
 # define a book list dictionary
 books = [
     {"id": "001", "name": "Python Crash Course", "author": "Eric Matthes", "rental_price": 17.90, "status": "available", "due_date": None, "book_rate": 4.8, "receipt_number": "None"},
-    {"id": "002", "name": "Web Scraping with Python", "author": "Ryan Mitchell", "rental_price": 19.00, "status": "unavailable", "due_date": "2023-04-22", "book_rate": 4.5, "receipt_number": 12},
+    {"id": "002", "name": "Web Scraping with Python", "author": "Ryan Mitchell", "rental_price": 19.00, "status": "unavailable", "due_date": "2023-04-22", "book_rate": 4.5, "receipt_number": 10},
     {"id": "003", "name": "Python Data Science Handbook", "author": "Jake VanderPlas", "rental_price": 22.0, "status": "available", "due_date": None, "book_rate": 4.3, "receipt_number": "None"},
     {"id": "004", "name": "Expert Python Programming", "author": "Tarek Ziade", "rental_price": 15.70, "status": "available", "due_date": None, "book_rate": 3.8, "receipt_number": "None"},
-    {"id": "005", "name": "Python Network Programming", "author": "Dr. M. O. Faruque Sarker", "rental_price": 23.50, "status": "unavailable", "due_date": "2023-04-23", "book_rate": 4.0, "receipt_number": 24}
+    {"id": "005", "name": "Python Network Programming", "author": "Dr. M. O. Faruque Sarker", "rental_price": 23.50, "status": "unavailable", "due_date": "2023-04-23", "book_rate": 4.0, "receipt_number": 11}
 ]
 
 # change the due date and receipt number manually input from string to date format
 for book in books:
-    if book ["due_date"]:
+    if book ["due_date"] != None:
         book ["due_date"] = datetime.datetime.strptime(book ["due_date"], "%Y-%m-%d").date()
- 
-
-
-
+    
 # obtain current date
 now = datetime.datetime.now()
 
@@ -47,7 +44,7 @@ booked_due_date = now.date() + datetime.timedelta(days=7)
 email_regex = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
 phone_regex = re.compile(r'^0\d{9}$')
 name_regex = re.compile(r'^[A-Za-z][A-Za-z_.\s]{7,29}$')
-addess_regex = re.compile(r'^[\d\s\w]+$')
+addess_regex = re.compile(r'^[\d\s\w]{5,50}$')
 
 
 # define a function to validate email
@@ -82,7 +79,7 @@ def validate_address():
     while True:
         address = input("Address: ")
         if not addess_regex.match(address):
-            print("\nSorry, the address you have entered is not valid, please try again, format: only letters, numbers and space.")
+            print("\nSorry, the address you have entered is not valid, please try again, format: 5-50 characters, only letters, numbers and space.")
         else:
             return address
 
@@ -127,18 +124,18 @@ def selected_book(books):
 
     return selected_book        
 
-# ================================ define a function to borrow a book =========================
-
+# ================================ Borrow book function ==============================================
+# define a receipt number
+receipt_count = 11
+def generate_receipt_number():
+    global receipt_count
+    receipt_count += 1
+    return receipt_count
 
 def borrow_book(selected_book, book_id):
-#   This function updates the availability of the selected book to False and
+# This function updates the availability of the selected book to False and
 # returns a receipt number for the transaction.
-    # define a receipt number
-    receipt_count = 10
-    def receipt_number():
-        global receipt_count
-        receipt_count += 1
-    receipt_number = receipt_count
+   
     confirm_borrow = input("\nThe book is currently available, do you want to borrow this book? (y/n): ")
     if confirm_borrow == "y":
         print("\nPlease enter your information: ")
@@ -153,7 +150,8 @@ def borrow_book(selected_book, book_id):
         
         # create a table to display receipt information
         receipts_table = PrettyTable()
-        receipts_table.field_names = [f"Receipt Number: {receipt_number}", "Information"]
+        receipt_num = generate_receipt_number()
+        receipts_table.field_names = [f"Receipt Number: {receipt_num}", "Information"]
         for receipt in receipts:
             receipts_table.add_row(["Name:", receipt["name"]])
             receipts_table.add_row(["Address:", receipt["address"]])
@@ -170,16 +168,20 @@ def borrow_book(selected_book, book_id):
         # update the selected book status and due date
         selected_book["status"] = "unavailable"
         selected_book["due_date"] = booked_due_date
-        selected_book["receipt_number"] = receipt_number
+        selected_book["receipt_number"] = receipt_num
     
     else:
         return None
-        
+    return receipt_num
 # ===================================Return Book Function===============================================================
 
 def return_book(books):
+
+
 # This function prompts the user to enter the receipt number of the book being returned,
 # and sets the book's availability to True. It returns the book details and receipt number.
+
+
     while True:
         try:
             return_receipt_number = int(input("\nPlease enter your receipt number: "))
@@ -211,18 +213,18 @@ def return_book(books):
 
                     # calculate the due balance table
                     due_balance = book["rental_price"] - book["rental_price"] * 0.2
-                    deposit =round(book["rental_price"] * 0.2,2)
+                    deposit =book["rental_price"] * 0.2
                     print(f"\nPlease pay your due balance: ${due_balance:.2f}")
                     due_balance_table = PrettyTable(["Receipt Number", "Rental Price", "Deposit", "Due Balance"])
-                    due_balance_table.add_row([return_receipt_number, book["rental_price"], deposit , "{:.2f}".format(due_balance)])
+                    due_balance_table.add_row([return_receipt_number, book["rental_price"], f"{deposit:.2f}", "{:.2f}".format(due_balance)])
                     print(due_balance_table)
-                    return book,return_receipt_number
-       
+                    return book
     print("\nThe number you entered is not in the list. Please check your receipt number.")
 
     return None, None
         
-        
+# =============================================Add Book Function===============================================================
+
     
 while True:
     print("\nWelcome to our online book rental service. Please choose your service type:")
@@ -244,8 +246,8 @@ while True:
     # obtain user input2
     elif choice == '2':
         display_books(books)
-        returned_book_list, return_receipt_number= return_book(books)
-        if returned_book_list or return_receipt_number!= None:
+        returned_book_list= return_book(books)
+        if returned_book_list != None:
             print("\nUpdated book list:")
             display_books(books)
             print("\nThank you for using our online book rental service. Have a nice day!")
