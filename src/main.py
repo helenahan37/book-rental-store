@@ -17,26 +17,30 @@ from prettytable import PrettyTable
 import re
 
 
+
 # define a book list dictionary
 books = [
-    {"id": "001", "name": "Python Crash Course", "author": "Eric Matthes", "rental_price": 17.90, "status": "available", "due_date": None, "book_rate": 4.8, "receipt_number": "None"},
+    {"id": "001", "name": "Python Crash Course", "author": "Eric Matthes", "rental_price": 17.90, "status": "available", "due_date": "None", "book_rate": 4.8, "receipt_number": "None"},
     {"id": "002", "name": "Web Scraping with Python", "author": "Ryan Mitchell", "rental_price": 19.00, "status": "unavailable", "due_date": "2023-04-22", "book_rate": 4.5, "receipt_number": 10},
-    {"id": "003", "name": "Python Data Science Handbook", "author": "Jake VanderPlas", "rental_price": 22.0, "status": "available", "due_date": None, "book_rate": 4.3, "receipt_number": "None"},
-    {"id": "004", "name": "Expert Python Programming", "author": "Tarek Ziade", "rental_price": 15.70, "status": "available", "due_date": None, "book_rate": 3.8, "receipt_number": "None"},
+    {"id": "003", "name": "Python Data Science Handbook", "author": "Jake VanderPlas", "rental_price": 22.0, "status": "available", "due_date": "None", "book_rate": 4.3, "receipt_number": "None"},
+    {"id": "004", "name": "Expert Python Programming", "author": "Tarek Ziade", "rental_price": 15.70, "status": "available", "due_date": "None", "book_rate": 3.8, "receipt_number": "None"},
     {"id": "005", "name": "Python Network Programming", "author": "Dr. M. O. Faruque Sarker", "rental_price": 23.50, "status": "unavailable", "due_date": "2023-04-23", "book_rate": 4.0, "receipt_number": 11}
 ]
 
-# change the due date and receipt number manually input from string to date format
-for book in books:
-    if book ["due_date"] != None:
-        book ["due_date"] = datetime.datetime.strptime(book ["due_date"], "%Y-%m-%d").date()
-    
 # obtain current date
 now = datetime.datetime.now()
-
-
+    
 # calculate the due date
 booked_due_date = now.date() + datetime.timedelta(days=7)
+    
+# change the due date manually input from string to date format
+for book in books:
+    if book ["due_date"] != "None":
+        book ["due_date"] = datetime.datetime.strptime(book["due_date"], "%Y-%m-%d").date()
+        available_days = booked_due_date - now.date()
+    else:
+        available_days = booked_due_date
+    
 
 
 #Regex
@@ -94,6 +98,24 @@ def display_books(books):
     print(table)
   
   
+# define a function enable users to reiterate the book list
+def browse_books():
+    while True:
+        confirm_browse = input("\nDo you want to continue to browse our book list? (y/n): ").lower()
+        if confirm_browse not in ["y", "n"]:
+            print("\nSorry, the option you have entered is not valid, please enter 'y' or 'n'.")
+        elif confirm_browse == "y":
+            display_books(books)
+            choose_book = select_book(books)
+            if choose_book != None:
+                borrow_book(choose_book, choose_book["id"])
+                return True
+        else:
+            print("\nThank you for using our online book rental service. See you next time!")
+            break     
+
+
+
 # define a function for selected book      
 def select_book(books):
     # This function prompts the user to select a book from the given list of books
@@ -113,36 +135,20 @@ def select_book(books):
                 break 
     if not selected_book:
         print("\nSorry, the book ID you have entered is not list in our online store. If you would like to add a new book, please press option 3.")
-        return None
-    
+        browse_books()
+        
+    elif selected_book["status"] == "unavailable" and selected_book["due_date"] == "unavailable":
+        print(f"\nSorry, the book will be add to our online store later, please check it after {available_days.days} days.")
+        browse_books()
+      
     elif selected_book["status"] == "unavailable":
-        booked_due_date = selected_book["due_date"]
-        available_days = booked_due_date - now.date()
-     
         print(f"\nSorry, the book is unavailable for rental currently. It will be available from {selected_book['due_date']}, {available_days.days} days from today.")  
-        return None
-
-    return selected_book        
+        browse_books()
+        
+    return selected_book       
 
 # ================================ Borrow book function ==============================================
 
-
-# define a function enable users to reiterate the book list
-def browse_books():
-    while True:
-        confirm_browse = input("\nDo you want to continue to browse our book list? (y/n): ").lower()
-        if confirm_browse not in ["y", "n"]:
-            print("\nSorry, the option you have entered is not valid, please enter 'y' or 'n'.")
-        elif confirm_browse == "y":
-            display_books(books)
-            choose_book = select_book(books)
-            if choose_book != None:
-                borrow_book(choose_book, choose_book["id"])
-                return True
-        else:
-            print("\nThank you for using our online book rental service. See you next time!")
-            break     
-       
 # define a receipt number
 receipt_count = 11
 def generate_receipt_number():
@@ -186,6 +192,7 @@ def borrow_book(selected_book, book_id):
             print(receipts_table.get_string())
 
             # update the selected book status and due date
+            selected_book["id"] = book_id
             selected_book["status"] = "unavailable"
             selected_book["due_date"] = booked_due_date
             selected_book["receipt_number"] = receipt_num
@@ -232,8 +239,8 @@ def return_book(books):
                     average_rate = (book["book_rate"] + current_book_rate)/2
                     book["book_rate"] = float(format(average_rate, '.1f'))
                     book["status"] = "available"
-                    book["due_date"] = None
-                    book["receipt_number"] = None
+                    book["due_date"] = "None"
+                    book["receipt_number"] = "None"
                     print(f"\nThank you for updating {book['name']}'s rate!")
 
                     # calculate the due balance table
@@ -249,7 +256,29 @@ def return_book(books):
     return None
         
 # =============================================Add Book Function===============================================================
-
+def add_book(books):
+    print ("Please enter the following information to add a book:")
+    
+    # add id from book list
+    
+    max_id = max(int(book["id"]) for book in books)
+    
+    # create a new book dictionary
+    new_book = {}
+    new_book["id"] = str(max_id + 1).zfill(3)
+    new_book["name"] = input("Book Name: ")
+    new_book["author"] = input("Author: ")
+    new_book["rental_price"] = "unavailable"
+    new_book["status"] = "unavailable"
+    new_book["due_date"] = "unavailable"
+    new_book["book_rate"] = "unavailable"
+    new_book["receipt_number"] = "unavailable"
+    
+    books.append(new_book)
+    
+    return books
+    
+# =============================================Main Function===============================================================
     
 while True:
     print("\nWelcome to our online book rental service. Please choose your service type:")
@@ -267,7 +296,6 @@ while True:
         if selected_book != None:
             borrow_book(selected_book, selected_book["id"])
             
-            
     # obtain user input2
     elif choice == '2':
         display_books(books)
@@ -276,6 +304,12 @@ while True:
             print("\nUpdated book list:")
             display_books(books)
             print("\nThank you for using our online book rental service. Have a nice day!")
+    
+    # obtain user input3
+    elif choice == '3':
+        add_book(books)
+        print(f"\nThe book has been added to the list. It will be available from {booked_due_date}")
+        display_books(books)
      
     
 
