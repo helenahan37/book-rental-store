@@ -135,13 +135,17 @@ def select_book(books):
     if not selected_book:
         print("\nSorry, the book ID you have entered is not list in our online store. If you would like to add a new book, please press option 3.")
         browse_books()
+        
+    
     elif selected_book["status"] == "unavailable" and selected_book["due_date"] == "unavailable":
         print(f"\nSorry, the book will be add to our online store later, please check it after {available_days.days} days.")
         browse_books()
+        
     
     elif selected_book["status"] == "unavailable":
         print(f"\nSorry, the book is unavailable for rental currently. It will be available from {selected_book['due_date']}, {available_days.days} days from today.")  
         browse_books()
+       
     
     return selected_book   
 
@@ -199,8 +203,8 @@ def borrow_book(selected_book):
         return False
 # This function updates the information of the selected book and
 # print a receipt number for the transaction.
-    continue_browsing = True
-    while continue_browsing and selected_book["status"] == "available":
+    continue_borrowing = True
+    while continue_borrowing and selected_book["status"] == "available":
         confirm_borrow = input("\nThe book is currently available, do you want to borrow this book? (y/n): ").lower()   
         if confirm_borrow not in ["y", "n"]:
             print("\nSorry, the option you have entered is not valid, please enter 'y' or 'n'.")
@@ -208,7 +212,7 @@ def borrow_book(selected_book):
             receipt_info_table()
             browse_books()
         else:
-            continue_browsing = browse_books()
+            continue_borrowing = browse_books()
             break
             
     
@@ -286,18 +290,23 @@ def add_book(books):
     return books
     
 # =============================================Main Function===============================================================
+print("\nWelcome to our online book rental service. Please choose your service type:")
+def main_menu():
     
-while True:
-    print("\nWelcome to our online book rental service. Please choose your service type:")
     print("1. Borrow a book")
     print("2. Return a book")
     print("3. Add a wish list book")
     print("4. Exit the program")
+    choice = input("\nPlease enter your choice: ")
+    return choice
+    
+user_choice = ""
+while user_choice != "4":
+    user_choice = main_menu()
 
     # obtain user input1
-    choice = input("\nPlease enter your choice: ")
-    
-    if choice == '1':
+
+    if user_choice == '1':
         display_books(books)
         selected_book = select_book(books)
         if selected_book != None:
@@ -305,7 +314,7 @@ while True:
 
         
     # obtain user input2
-    elif choice == '2':
+    elif user_choice == '2':
         display_books(books)
         returned_book_list= return_book(books)
         if returned_book_list != None:
@@ -314,14 +323,19 @@ while True:
             print("\nThank you for using our online book rental service. Have a nice day!")
     
     # obtain user input3
-    elif choice == '3':
+    elif user_choice == '3':
         add_book(books)
         print(f"\nThe book has been added to the list. It will be available from {booked_due_date}")
         display_books(books)
-     
     
 
-       
-
-            
+    elif user_choice == '4':
+        continue
+    
+    else:
+        print("\nInvalid input. Please enter a number from 1-4.")
+        continue
+    
+    input("\nPress enter to continue...")
         
+    
