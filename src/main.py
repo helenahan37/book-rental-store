@@ -15,7 +15,7 @@
 import datetime
 from prettytable import PrettyTable
 import re
-
+import sys
 
 
 # define a book list dictionary
@@ -97,24 +97,6 @@ def display_books(books):
     print("\nHere is the list of books for rental: ")
     print(table)
  
-
-# define a function enable users to reiterate the book list
-def browse_books():
-    while True:
-        confirm_browse = input("\nDo you want to continue to browse our book list? (y/n): ").lower()
-        if confirm_browse not in ["y", "n"]:
-            print("\nSorry, the option you have entered is not valid, please enter 'y' or 'n'.")
-        elif confirm_browse == "y":
-            display_books(books)
-            selected_book = select_book(books)
-            if selected_book != None:
-                borrow_book(selected_book)
-                return True
-        else:
-            print("\nThank you for using our online book rental service. See you next time!")
-            break     
-     
-  
 # define a function for selected book      
 def select_book(books):
     # This function prompts the user to select a book from the given list of books
@@ -129,25 +111,47 @@ def select_book(books):
     # create a selected_book dictionary to store the selected book
     selected_book = {}
     for book in books:
-            if book["id"] == book_id:
-                selected_book = book
-                break 
-    if not selected_book:
+        if book["id"] == book_id:
+            selected_book = book
+            break 
+    selected_book = [item for item in books if item["id"] == book_id]
+    if not len(selected_book):
         print("\nSorry, the book ID you have entered is not list in our online store. If you would like to add a new book, please press option 3.")
-        browse_books()
-        
-    
-    elif selected_book["status"] == "unavailable" and selected_book["due_date"] == "unavailable":
+        return browse_books(books,selected_book)
+            
+    selected_book = selected_book[0]
+    if selected_book["status"] == "unavailable" and selected_book["due_date"] == "unavailable":
         print(f"\nSorry, the book will be add to our online store later, please check it after {available_days.days} days.")
-        browse_books()
+        return browse_books(books,selected_book)
         
     
     elif selected_book["status"] == "unavailable":
         print(f"\nSorry, the book is unavailable for rental currently. It will be available from {selected_book['due_date']}, {available_days.days} days from today.")  
-        browse_books()
+        return browse_books(books,selected_book)
        
     
-    return selected_book   
+    return selected_book  
+
+# define a function enable users to reiterate the book list
+def browse_books(books, selected_book):
+    browse_again = True  
+    while browse_again:  
+        confirm_browse = input("\nDo you want to continue to browse our book list? (y/n): ").lower()
+        if confirm_browse not in ["y", "n"]:
+            print("\nSorry, the option you have entered is not valid, please enter 'y' or 'n'.")
+        elif confirm_browse == "y":
+            display_books(books)
+            selected_book = select_book(books)
+            if selected_book is not None:
+                borrow_book(selected_book, books)
+                browse_again = False  
+        else:
+            print("\nThank you for using our online book rental service. See you next time!")
+            browse_again = False  
+
+    return selected_book
+
+ 
 
 # ================================ Borrow book function ==============================================
 
@@ -161,13 +165,13 @@ def generate_receipt_number():
 
 
 # define a receipt table
-def receipt_info_table():
+def receipt_info_table(selected_book, books):
     print ("\nPlease enter your personal information to complete the transaction.")
     name = validate_name()
     address = validate_address()
     email =validate_email()
     phone = validate_phone()
-    receipt_id = selected_book["id"]
+    receipt_id = book["id"]
     # create a receipt dictionary to store the receipt information
     receipts = {}
     receipts = [{"name": name, "address": address, "phone": phone, "email": email, "book_id": receipt_id, "book_name": selected_book["name"], "borrow_date": now.date(), "due_date": booked_due_date, "deposit": round(selected_book["rental_price"] * 0.2, 2)}]
@@ -190,7 +194,6 @@ def receipt_info_table():
     print(receipts_table)
 
     # update the selected book status and due date
-    selected_book["id"] = receipt_id
     selected_book["status"] = "unavailable"
     selected_book["due_date"] = booked_due_date
     selected_book["receipt_number"] = receipt_num
@@ -198,21 +201,20 @@ def receipt_info_table():
     return 
 
     
-def borrow_book(selected_book):
-    if not selected_book:
-        return False
+def borrow_book(selected_book, books):
+
 # This function updates the information of the selected book and
 # print a receipt number for the transaction.
     continue_browsing = True
-    while continue_browsing and selected_book["status"] == "available":
+    while continue_browsing and selected_book and selected_book["status"] == "available":
         confirm_borrow = input("\nThe book is currently available, do you want to borrow this book? (y/n): ").lower()   
         if confirm_borrow not in ["y", "n"]:
             print("\nSorry, the option you have entered is not valid, please enter 'y' or 'n'.")
         elif confirm_borrow == "y":
-            receipt_info_table()
-            browse_books()
+            receipt_info_table(selected_book, books)
+            selected_book = browse_books(books,selected_book)
         else:
-            continue_browsing = browse_books()
+            continue_browsing = browse_books(books,selected_book)
 
     return False       
     
@@ -310,7 +312,7 @@ while user_choice != "4":
         display_books(books)
         selected_book = select_book(books)
         if selected_book != None:
-            borrow_book(selected_book)
+            borrow_book(selected_book,books)
 
         
     # obtain user input2
@@ -327,10 +329,12 @@ while user_choice != "4":
         add_book(books)
         print(f"\nThe book has been added to the list. It will be available from {booked_due_date}")
         display_books(books)
+        selected_book = None
+        browse_books(books,selected_book)
     
 
     elif user_choice == '4':
-        continue
+        sys.exit(0)
     
     else:
         print("\nInvalid input. Please enter a number from 1-4.")
