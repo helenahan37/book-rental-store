@@ -203,8 +203,8 @@ def borrow_book(selected_book):
         return False
 # This function updates the information of the selected book and
 # print a receipt number for the transaction.
-    continue_borrowing = True
-    while continue_borrowing and selected_book["status"] == "available":
+    continue_browsing = True
+    while continue_browsing and selected_book["status"] == "available":
         confirm_borrow = input("\nThe book is currently available, do you want to borrow this book? (y/n): ").lower()   
         if confirm_borrow not in ["y", "n"]:
             print("\nSorry, the option you have entered is not valid, please enter 'y' or 'n'.")
@@ -212,9 +212,9 @@ def borrow_book(selected_book):
             receipt_info_table()
             browse_books()
         else:
-            continue_borrowing = browse_books()
-            break
-            
+            continue_browsing = browse_books()
+
+    return False       
     
 
 # ===================================Return Book Function===============================================================
