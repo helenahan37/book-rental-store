@@ -1,15 +1,18 @@
-# The program should present the customer with a list of services to choose from: 1. Borrow a book, 2. Return a book, 3. Quit.
+'''This is the main program for the book rental system.
 
-# If the customer selects "Borrow a book," the program should print out a list of available books, books information, their due dates, rating starts and whether they are available for rental.
-# The program should then collect the customer's information and print a receipt that includes the customer's name,
-# the date the book was borrowed, the due date, and the deposit amount.
+The program should present the customer with a list of services to choose from: 1. Borrow a book, 2. Return a book, 3. Quit.
+If the customer selects "Borrow a book," the program should print out a list of available books, books information, their due dates, rating starts and whether they are available for rental.
 
-# If the customer selects "Return a book," the program should prompt the customer to enter the receipt number for the book being returned. The program should then print out the amount due for the book and refund the deposit.
-# when customer returned a book, the program should ask customer wether they want rate the book, and update the book rate information
+The program should then collect the customer's information and print a receipt that includes the customer's name,
+the date the book was borrowed, the due date, and the deposit amount.
 
-# if customer rate the book, the program should calculate the new book rate and update the book rate information
+If the customer selects "Return a book," the program should prompt the customer to enter the receipt number for the book being returned. The program should then print out the amount due for the book and refund the deposit.
+when customer returned a book, the program should ask customer wether they want rate the book, and update the book rate information
 
-# if customer don't rate the book, the program should print a message to tell customer they can rate the book later and quit the program
+if customer rate the book, the program should calculate the new book rate and update the book rate information
+
+if customer don't rate the book, the program should print a message to tell customer they can rate the book later and quit the program
+'''
 
 
 import datetime
@@ -23,7 +26,7 @@ import csv
 #     {"id": "004", "name": "Expert Python Programming", "author": "Tarek Ziade", "rental_price": 15.70, "status": "available", "due_date": "None", "book_rate": 3.8, "receipt_number": "None"},
 #     {"id": "005", "name": "Python Network Programming", "author": "Dr. M. O. Faruque Sarker", "rental_price": 23.50, "status": "unavailable", "due_date": "2023-05-19", "book_rate": 4.0, "receipt_number": 11}
 # ]
-receipt_count = 11
+receipt_count = 20
 
 # Regex
 email_regex = re.compile(
@@ -32,7 +35,6 @@ phone_regex = re.compile(r'^0\d{9}$')
 name_regex = re.compile(r'^[A-Za-z][A-Za-z_.\s]{7,29}$')
 address_regex = re.compile(r'^[\d\s\w]{5,50}$')
 
-csv_filename = 'db.csv'
 
 
 # define a function to validate email
@@ -191,7 +193,7 @@ def borrow_book(selected_book):
 
         # update the selected book status and due date
         selected_book["status"] = "unavailable"
-        selected_book["due_date"] = now.date() + datetime.timedelta(days=7)
+        selected_book["due_date"] = (now.date() + datetime.timedelta(days=7)).strftime("%Y-%m-%d")
         selected_book["receipt_number"] = receipt_num
 
         return selected_book
@@ -216,8 +218,7 @@ def return_book(books):
                     print(f"\nThank you for returning {book['name']}.")
                     while True:
                         try:
-                            current_book_rate = float(
-                                input("\nPlease rate the book you have borrowed: "))
+                            current_book_rate = float(input("\nPlease rate the book you have borrowed: "))       
                             if current_book_rate <= 0 or current_book_rate > 5:
                                 raise ValueError
                         except ValueError:
@@ -227,14 +228,14 @@ def return_book(books):
                             if book['book_rate'] == -1:
                                 average_rate = current_book_rate
                             else:
-                                average_rate = (
-                                    book["book_rate"] + current_book_rate)/2
+                                average_rate = (book["book_rate"] + current_book_rate)/2
+                                          
                             book["book_rate"] = float(
                                 format(average_rate, '.1f'))
 
                             book["status"] = "available"
                             book["due_date"] = "None"
-                            book["receipt_number"] = -1
+                            book["receipt_number"] = "-1"
 
                             print(
                                 f"\nThank you for updating {book['name']}'s rate!")
@@ -280,10 +281,22 @@ def add_book(books):
 
     return books
 
+csv_file = 'db.csv'
 
-def read_db(csv_filename):
+# check if csv file exists
+
+try: 
+    db_file = open(csv_file, 'r')
+    db_file.close()
+    print("Database file found.")
+except FileNotFoundError:
+    db_file.open(csv_file, 'w')
+    db_file.close()
+    print("file not found, creating new file...")
+
+def read_db(csv_file):
     books = []
-    with open(csv_filename, "r") as f:
+    with open(csv_file, "r") as f:
         reader = csv.DictReader(f)
         for book in reader:
             book["rental_price"] = float(book["rental_price"])
@@ -293,8 +306,8 @@ def read_db(csv_filename):
     return books
 
 
-def write_db(books, csv_filename):
-    with open(csv_filename, "w", newline="") as f:
+def write_db(books, csv_file):
+    with open(csv_file, "w", newline="") as f:
         columns = ["id", "name", "author", "rental_price",
                    "status", "due_date", "book_rate", "receipt_number"]
         writer = csv.DictWriter(f, fieldnames=columns)
@@ -306,19 +319,16 @@ def prompt_yes_or_no(prompt):
     while True:
         confirm_browse = input(prompt).lower()
         if confirm_browse not in ["y", "n"]:
-            print( "\nSorry, the option you have entered is not valid, please enter 'y' or 'n'.")         
+            print("\nSorry, the option you have entered is not valid, please enter 'y' or 'n'.")         
         else:
             return confirm_browse == "y"
 
 # =============================================Main Function===============================================================
 
 
-
-
-
 def main():
 
-    books = read_db(csv_filename)
+    books = read_db(csv_file)
 
     print("\nWelcome to our online book rental service. Please choose your service type:")
 
@@ -347,12 +357,12 @@ def main():
             while True:
                 display_books(books)
                 selected_book = select_book(books)
+                # if client select and confirm to borrow o book, update the book list
                 if selected_book is not None:
                     if borrow_book(selected_book) is not None:
-                        write_db(books, csv_filename)
+                        write_db(books, csv_file)
                 if not prompt_yes_or_no("\nDo you want to continue to browse our book list? (y/n): "):
-                    print(
-                        "\nThank you for using our online book rental service. See you next time!")
+                    print("\nThank you for using our online borrow book service.")
                     break
 
         # obtain user input2
@@ -361,16 +371,14 @@ def main():
                 display_books(books)
                 returned_book = return_book(books)
                 if returned_book is not None:
-                    write_db(books, csv_filename)
+                    write_db(books, csv_file)
                     print("\nUpdated book list:")
                     display_books(books)
-                    print(
-                        "\nThank you for using our online book rental service. Have a nice day!")
+                    print("\nThank you for using our online book return rental service.")
                     break
                 else:
                     if not prompt_yes_or_no("\nDo you want to continue to return your book? (y/n): "):
-                        print(
-                            "\nThank you for using our online book rental service. See you next time!")
+                        print("\nThank you for using our online book return book service.") 
                         break
 
         # obtain user input3
@@ -378,17 +386,17 @@ def main():
             while True:
                 display_books(books)
                 add_book(books)
-                write_db(books, csv_filename)
+                write_db(books, csv_file)
                 print(
                     f"\nThe book has been added to the list. It will be available in 7 days")
                 display_books(books)
                 if not prompt_yes_or_no("\nDo you want to continue to add new book? (y/n): "):
-                    print(
-                        "\nThank you for using our online book rental service. See you next time!")
+                    print("\nThank you for using our online adding book service.")
                     break
 
         elif user_choice == "4":
-            write_db(books, csv_filename)
+            write_db(books, csv_file)
+            print( "\nThank you for using our online book rental service. See you next time!")           
             continue
 
         else:
