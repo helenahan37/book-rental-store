@@ -20,15 +20,17 @@ from prettytable import PrettyTable
 import re
 import csv
 import sys
+from colored import fg, bg, attr
 
-receipt_count = 20
+
 
 # Regex
 email_regex = re.compile(
  r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
 phone_regex = re.compile(r'^0\d{9}$')
-name_regex = re.compile(r'^[A-Za-z][A-Za-z_.\s]{7,29}$')
-address_regex = re.compile(r'^[\d\s\w]{5,50}$')
+name_regex = re.compile(r'^[A-Za-z][A-Za-z_.\s]{5,15}$')
+address_regex = re.compile(r'^[\d\s\w]{7,50}$')
+book_name_regex = re.compile(r'^[a-zA-Z0-9\s\-\.:]{5,20}$')
 
 
 
@@ -37,7 +39,7 @@ def validate_email():
     while True:
         email = input("Email: ")
         if not email_regex.match(email):
-            print("\nSorry, the email address you have entered is not valid, please try again, format: (username)@(domainname).(top-leveldomain).")
+            print(f"\n{fg(229)}Sorry, the email address you have entered is not valid, please try again, format: (username)@(domainname).(top-leveldomain). {attr(0)}")
         else:
             return email
 
@@ -48,7 +50,7 @@ def validate_phone():
     while True:
         phone = input("Phone: ")
         if not phone_regex.match(phone):
-            print("\nSorry, the phone number you have entered is not valid, please try again, format: 10-digit phone number start from 0.")
+            print(f"\n{fg(229)}Sorry, the phone number you have entered is not valid, please try again, format: 10-digit phone number start from 0. {attr(0)}")
         else:
             return phone
 
@@ -59,7 +61,7 @@ def validate_name():
     while True:
         name = input("Name: ")
         if not name_regex.match(name):
-            print("\nSorry, the name you have entered is not valid, please try again, format: 8-30 characters, only letters, space, dot and underscore.")
+            print(f"\n{fg(229)}Sorry, the name you have entered is not valid, please try again, format: 5-15 characters, only letters, space, dot and underscore. {attr(0)}")
         else:
             return name
 
@@ -68,10 +70,25 @@ def validate_address():
     while True:
         address = input("Address: ")
         if not address_regex.match(address):
-            print("\nSorry, the address you have entered is not valid, please try again, format: 5-50 characters, only letters, numbers and space.")
+            print(f"\n{fg(229)}Sorry, the address you have entered is not valid, please try again, format: 7-50 characters, only letters, numbers and space. {attr(0)}")
         else:
             return address
 
+def validate_book_name():
+    while True:
+        book_name = input("Book Name: ")
+        if not book_name_regex.match(book_name):
+            print(f"\n{fg(229)}Sorry, the book name you have entered is not valid, please try again, format: 5-20 characters only letters, space, hyphen, dot and colon. {attr(0)}")
+        else:
+            return book_name
+        
+def validate_author_name():
+    while True:
+        book_author = input("Book Author: ")
+        if not name_regex.match(book_author):
+            print(f"\n{fg(229)}Sorry, the author name you have entered is not valid, please try again, format: 5-15 characters, only letters, space, dot and underscore. {attr(0)}")
+        else:
+            return book_author
 # define a function to display book list
 
 
@@ -83,7 +100,7 @@ def display_books(books):
         row = [book["id"], book["name"], book["author"], book["rental_price"],
                book["status"], book["due_date"], book["book_rate"], book["receipt_number"]]
         table.add_row(row)
-    print("\nHere is the list of books for rental: ")
+    print(f"{fg('cyan')}{attr('bold')}\nHere is the list of books for rental: {attr('reset')}")
     print(table)
 
 # define a function for selected book
@@ -93,27 +110,27 @@ def select_book(books):
     # This function prompts the user to select a book from the given list of books
     # and returns the details of the selected book.
     while True:
-        book_id = input("\nPlease enter the book ID you are interested: ")
+        book_id = input(f"\n{fg(122)}Please enter the book ID you are interested: {attr(0)}")
         if not book_id.isdigit() or len(book_id) != 3:
-            print("\nSorry, the book ID you have entered is not valid, please enter a valid 3-digit integer ID.")         
+            print(f"\n{fg(226)}Sorry, the book ID you have entered is not valid, please enter a valid 3-digit integer ID. {attr(0)}")         
         else:
             break
 
     selected_book = [item for item in books if item["id"] == book_id]
     if len(selected_book) == 0:
-        print("\nSorry, the book ID you have entered is not list in our online store. If you would like to add a new book, please press option 3.")
+        print(f"\n{fg(226)}Sorry, the book ID you have entered is not list in our online store. If you would like to add a new book, please press option 3. {attr(0)}")
         return
 
     selected_book = selected_book[0]
 
     if selected_book["status"] == "unavailable":
         if selected_book["due_date"] == "unavailable":
-            print( f"\nSorry, the book will be add to our online store later, please check it after 7 days.")
+            print(f"\n{fg(226)}Sorry, the book will be add to our online store later, please check it after 7 days.")
         else:
             now = datetime.datetime.now()
             time_diff = datetime.datetime.strptime(
                 selected_book["due_date"], "%Y-%m-%d").date() - now.date()
-            print( f"\nSorry, the book is unavailable for rental currently. It will be available from {selected_book['due_date']}, {time_diff.days} days from today.")        
+            print(f"\n{fg(226)}Sorry, the book is unavailable for rental currently. It will be available from {selected_book['due_date']}, {time_diff.days} days from today. {attr(0)}")        
         return
 
     return selected_book
@@ -123,7 +140,7 @@ def select_book(books):
 
 
 # create receipt number
-
+receipt_count = 20
 def generate_receipt_number():
     global receipt_count
     receipt_count += 1
@@ -150,9 +167,9 @@ def borrow_book(selected_book):
     # This function updates the information of the selected book and
     # print a receipt number for the transaction.
 
-    if prompt_yes_or_no("\nThe book is currently available, do you want to borrow this book? (y/n): "):
+    if prompt_yes_or_no(f"\n{fg(229)}The book is currently available, do you want to borrow this book? (y/n): {attr(0)}"):
 
-        print("\nPlease enter your personal information to complete the transaction.")
+        print(f"\n{fg(122)}Please enter your personal information to complete the transaction.{attr(0)}")
 
         name = validate_name()
         address = validate_address()
@@ -180,7 +197,7 @@ def borrow_book(selected_book):
             "due_date": now.date() + datetime.timedelta(days=7),
             "deposit": deposit,
         }
-        print(f"\nThank you for borrowing {selected_book['name']}. Here is your receipt.") 
+        print(f"\n{fg(216)}{attr('bold')}Thank you for borrowing {selected_book['name']}. Here is your receipt. {attr('reset')}") 
 
         # create a table to display receipt information
         show_receipt(receipt)
@@ -202,38 +219,34 @@ def return_book(books):
 
     while True:
         try:
-            return_receipt_number = int(input("\nPlease enter your receipt number: "))
+            return_receipt_number = int(input(f"\n{fg(122)}Please enter your receipt number:  {attr(0)}"))
             if return_receipt_number <= 0:
-                print("\nPlease enter a positive number.")
+                print(f"\n{fg(229)}Please enter a positive number. {attr(0)}")
                 continue
             
-            for book in books:
+            for book in books:  
                 if book["receipt_number"] == int(return_receipt_number):
-                    print(f"\nThank you for returning {book['name']}.")
+                    print(f"\n{fg(226)}Thank you for returning {book['name']}. {attr(0)}")
                     while True:
                         try:
-                            current_book_rate = float(input("\nPlease rate the book you have borrowed: "))       
+                            current_book_rate = float(input(f"\n{fg(122)}Please rate the book you have borrowed:  {attr(0)}"))       
                             if current_book_rate <= 0 or current_book_rate > 5:
                                 raise ValueError
                         except ValueError:
-                            print("\nInvalid input. Please enter a non-zero number (from 1-5)")
+                            print(f"\n{fg(229)}Invalid input. Please enter a non-zero number (from 1-5)")
                         else:
-                            if book['book_rate'] == "None":
-                                average_rate = current_book_rate
-                            else:
-                                average_rate = (book["book_rate"] + current_book_rate)/2
+                            average_rate = (book["book_rate"] + current_book_rate)/2
                                           
                             book["book_rate"] = float(format(average_rate, '.1f'))
                             book["status"] = "available"
                             book["due_date"] = "None"
                             book["receipt_number"] = 0
 
-                            print( f"\nThank you for updating {book['name']}'s rate!")
+                            print(f"\n{fg(216)}{attr('bold')}Thank you for updating {book['name']}'s rate! {attr(0)}")
                         
                             due_balance = float(book["rental_price"] -  book["rental_price"] * 0.2)
                             deposit = float(book["rental_price"] * 0.2)
-                            print(
-                                f"\nPlease pay your due balance: ${due_balance:.2f}")
+                            print(f"{fg(229)}\nPlease pay your due balance: ${due_balance:.2f} {attr(0)}")    
                             due_balance_table = PrettyTable(
                                 ["Receipt Number", "Rental Price", "Deposit", "Due Balance"])
                             due_balance_table.add_row(
@@ -241,25 +254,27 @@ def return_book(books):
                             print(due_balance_table)
                             return book
             else:
-                print( "\nThe number you entered is not in the list. Please double check your receipt number.")    
+                print(f"{fg(229)}\nThe number you entered is not in the list. Please double check your receipt number. {attr(0)}")    
                 break
         except ValueError:
-            print("\nInvalid input. Please enter a valid number.")
+            print(f"{fg(229)}\nInvalid input. Please enter a valid number. {attr(0)}")
 
 
 # =============================================Add Book Function===============================================================
 def add_book(books):
-    print("\nPlease enter the following information to add a book:")
+    print(f"\n{fg(122)}Please enter the following information to add a book: {attr(0)}")
 
     # add id from book list
 
     max_id = max(int(book["id"]) for book in books)
 
+    book_name = validate_book_name()
+    book_author = validate_author_name()
     # create a new book dictionary
     new_book = {}
     new_book["id"] = str(max_id + 1).zfill(3)
-    new_book["name"] = input("Book Name: ")
-    new_book["author"] = input("Author: ")
+    new_book["name"] = book_name
+    new_book["author"] = book_author
     new_book["rental_price"] = 0.0
     new_book["status"] = "unavailable"
     new_book["due_date"] = "unavailable"
@@ -308,32 +323,28 @@ def prompt_yes_or_no(prompt):
     while True:
         confirm_browse = input(prompt).lower()
         if confirm_browse not in ["y", "n"]:
-            print("\nSorry, the option you have entered is not valid, please enter 'y' or 'n'.")         
+            print(f"\n{fg(229)}Sorry, the option you have entered is not valid, please enter 'y' or 'n'. {attr(0)}")         
         else:
             return confirm_browse == "y"
 
-def quite_program():
-    print("\nPress enter to continue or type 'q' to exit.")
-    choice = input().lower()
-    if choice == 'q':
-        print("\nThank you for using our online book rental store. See you next time!")
-        return
 # =============================================Main Function===============================================================
 
 
+    
 def main():
 
     books = read_db(csv_file)
 
-    print("\nWelcome to our online book rental store. Please choose your service type:")
+    print(f"{fg('blue')}{attr('bold')}\nWelcome to our online book rental store. Please choose your service: {attr('reset')}")
 
     def main_menu():
 
-        print("1. Borrow a book")
-        print("2. Return a book")
-        print("3. Add a wish list book")
-        print("4. Exit the program")
-        choice = input("\nPlease enter your choice: ")
+        print(f"{fg(229)}\n1. Borrow a book{attr('reset')}")
+        print(f"{fg(229)}2. Return a book{attr('reset')}")
+        print(f"{fg(229)}3. Add a wish list book{attr('reset')}")
+        print(f"{fg(229)}4. Exit the program{attr('reset')}")
+
+        choice = input(f"{fg(122)}\nPlease enter your choice: {attr('reset')}")
         return choice
 
     user_choice = ""
@@ -356,8 +367,8 @@ def main():
                 if selected_book is not None:
                     if borrow_book(selected_book) is not None:
                         write_db(books, csv_file)
-                if not prompt_yes_or_no("\nDo you want to continue to browse our book list? (y/n): "):
-                    print("\nThank you for using our online borrow book service.")
+                if not prompt_yes_or_no(f"\n{fg(117)}{attr('bold')}Do you want to continue to browse our book list? (y/n): {attr('reset')}"):
+                    print(f"\n{fg(216)}{attr('bold')}{attr('bold')}Thank you for using our online borrow book service.")
                     break
 
         # obtain user input2
@@ -367,13 +378,13 @@ def main():
                 returned_book = return_book(books)
                 if returned_book is not None:
                     write_db(books, csv_file)
-                    print("\nUpdated book list:")
+                    print(f"{fg(229)}\nUpdated book list: {attr(0)}")
                     display_books(books)
-                    print("\nThank you for using our online book return rental service.")
+                    print(f"{fg(216)}{attr('bold')}\nThank you for using our online book return rental service.")
                     break
                 else:
-                    if not prompt_yes_or_no("\nDo you want to continue to return your book? (y/n): "):
-                        print("\nThank you for using our online book return book service.") 
+                    if not prompt_yes_or_no(f"{fg(117)}{attr('bold')}\nDo you want to continue to return your book? (y/n):  {attr(0)}"):
+                        print(f"{fg(216)}{attr('bold')}\nThank you for using our online book return book service.") 
                         break
 
         # obtain user input3
@@ -382,23 +393,23 @@ def main():
                 display_books(books)
                 add_book(books)
                 write_db(books, csv_file)
-                print(f"\nThe book has been added to the list. It will be available in 7 days")
+                print(f"{fg(123)}{attr('bold')}\nThe book has been added to the list. It will be available in 7 days. {attr(0)}")
                 display_books(books)
-                if not prompt_yes_or_no("\nDo you want to continue to add new book? (y/n): "):
-                    print("\nThank you for using our online adding book service.")
+                if not prompt_yes_or_no(f"\n{fg(193)}{attr('bold')}Do you want to continue to add new book? (y/n):  {attr(0)}"):
+                    print(f"\n{fg(216)}{attr('bold')}Thank you for using our online adding book service. {attr(0)}")
                     break
 
         elif user_choice == "4":
             write_db(books, csv_file)
-            print( "\nThank you for using our online book rental store. See you next time!")           
+            print(f"{fg(216)}{attr('bold')}\nThank you for using our online book rental store. See you next time! {attr(0)}")           
             continue
 
         else:
             print("\nInvalid input. Please enter a number from 1-4.")
             continue
 
-        
-
-
 if __name__ == "__main__":
-    main()
+    main()     
+
+
+
