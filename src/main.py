@@ -14,326 +14,18 @@ if customer rate the book, the program should calculate the new book rate and up
 if customer don't rate the book, the program should print a message to tell customer they can rate the book later and quit the program
 '''
 
-
-import datetime
 from prettytable import PrettyTable
-import re
-import csv
-import sys
 from colored import fg, bg, attr
+import sys
 
-
-
-# Regex
-email_regex = re.compile(
- r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
-phone_regex = re.compile(r'^0\d{9}$')
-name_regex = re.compile(r'^[A-Za-z][A-Za-z_.\s]{5,15}$')
-address_regex = re.compile(r'^[\d\s\w]{7,50}$')
-book_name_regex = re.compile(r'^[a-zA-Z0-9\s\-\.:]{5,20}$')
-
-
-
-# define a function to validate email
-def validate_email():
-    while True:
-        email = input("Email: ")
-        if not email_regex.match(email):
-            print(f"\n{fg(229)}Sorry, the email address you have entered is not valid, please try again, format: (username)@(domainname).(top-leveldomain). {attr(0)}")
-        else:
-            return email
-
-# define a function to validate phone number
-
-
-def validate_phone():
-    while True:
-        phone = input("Phone: ")
-        if not phone_regex.match(phone):
-            print(f"\n{fg(229)}Sorry, the phone number you have entered is not valid, please try again, format: 10-digit phone number start from 0. {attr(0)}")
-        else:
-            return phone
-
-# define a function to validate name
-
-
-def validate_name():
-    while True:
-        name = input("Name: ")
-        if not name_regex.match(name):
-            print(f"\n{fg(229)}Sorry, the name you have entered is not valid, please try again, format: 5-15 characters, only letters, space, dot and underscore. {attr(0)}")
-        else:
-            return name
-
-
-def validate_address():
-    while True:
-        address = input("Address: ")
-        if not address_regex.match(address):
-            print(f"\n{fg(229)}Sorry, the address you have entered is not valid, please try again, format: 7-50 characters, only letters, numbers and space. {attr(0)}")
-        else:
-            return address
-
-def validate_book_name():
-    while True:
-        book_name = input("Book Name: ")
-        if not book_name_regex.match(book_name):
-            print(f"\n{fg(229)}Sorry, the book name you have entered is not valid, please try again, format: 5-20 characters only letters, space, hyphen, dot and colon. {attr(0)}")
-        else:
-            return book_name
-        
-def validate_author_name():
-    while True:
-        book_author = input("Book Author: ")
-        if not name_regex.match(book_author):
-            print(f"\n{fg(229)}Sorry, the author name you have entered is not valid, please try again, format: 5-15 characters, only letters, space, dot and underscore. {attr(0)}")
-        else:
-            return book_author
-# define a function to display book list
-
-
-def display_books(books):
- # define a table to display book list
-    table = PrettyTable(["ID", "Name", "Author", "Rental Price",
-                        "Status", "Due Date", "Book Rate", "Receipt Number"])
-    for book in books:
-        row = [book["id"], book["name"], book["author"], book["rental_price"],
-               book["status"], book["due_date"], book["book_rate"], book["receipt_number"]]
-        table.add_row(row)
-        for row in table._rows:
-            for i, cell in enumerate(row):
-                if cell ==0:
-                    row[i] = "NA"
-    print(f"{fg('cyan')}{attr('bold')}\nHere is the list of books for rental: {attr('reset')}")
-    print(table)
-
-# define a function for selected book
-
-
-def select_book(books):
-    # This function prompts the user to select a book from the given list of books
-    # and returns the details of the selected book.
-    while True:
-        book_id = input(f"\n{fg(122)}Please enter the book ID you are interested: {attr(0)}")
-        if not book_id.isdigit() or len(book_id) != 3:
-            print(f"\n{fg(226)}Sorry, the book ID you have entered is not valid, please enter a valid 3-digit integer ID. {attr(0)}")         
-        else:
-            break
-
-    selected_book = [item for item in books if item["id"] == book_id]
-    if len(selected_book) == 0:
-        print(f"\n{fg(226)}Sorry, the book ID you have entered is not list in our online store. If you would like to add a new book, please press option 3. {attr(0)}")
-        return
-
-    selected_book = selected_book[0]
-
-    if selected_book["status"] == "unavailable":
-        if selected_book["due_date"] == "unavailable":
-            print(f"\n{fg(226)}Sorry, the book will be add to our online store later, please check it after 7 days.")
-        else:
-            now = datetime.datetime.now()
-            time_diff = datetime.datetime.strptime(
-                selected_book["due_date"], "%Y-%m-%d").date() - now.date()
-            print(f"\n{fg(226)}Sorry, the book is unavailable for rental currently. It will be available from {selected_book['due_date']}, {time_diff.days} days from today. {attr(0)}")        
-        return
-
-    return selected_book
-
-
-# ================================ Borrow book function ==============================================
-
-
-# create receipt number
-receipt_count = 20
-def generate_receipt_number():
-    global receipt_count
-    receipt_count += 1
-    return receipt_count
-
-
-# define a receipt table
-def show_receipt(receipt):
-    receipt_table = PrettyTable()
-    receipt_table.field_names = [f"Receipt Number: {receipt['receipt_num']}", "Information"]
-    receipt_table.add_row(["Name:", receipt["name"]])
-    receipt_table.add_row(["Address:", receipt["address"]])
-    receipt_table.add_row(["Phone:", receipt["phone"]])
-    receipt_table.add_row(["Email:", receipt["email"]])
-    receipt_table.add_row(["Book ID:", receipt["book_id"]])
-    receipt_table.add_row(["Book Name:", receipt["book_name"]])
-    receipt_table.add_row(["Borrow Date:", receipt["borrow_date"]])
-    receipt_table.add_row(["Due Date:", receipt["due_date"]])
-    receipt_table.add_row(["Deposit:", receipt["deposit"]])
-    print(receipt_table)
-
-
-def borrow_book(selected_book):
-    # This function updates the information of the selected book and
-    # print a receipt number for the transaction.
-
-    if prompt_yes_or_no(f"\n{fg(229)}The book is currently available, do you want to borrow this book? (y/n): {attr(0)}"):
-
-        print(f"\n{fg(122)}Please enter your personal information to complete the transaction.{attr(0)}")
-
-        name = validate_name()
-        address = validate_address()
-        email = validate_email()
-        phone = validate_phone()
-        receipt_id = selected_book["id"]
-        # create a receipt dictionary to store the receipt information
-        # print(selected_book)
-
-        now = datetime.datetime.now()
-
-        receipt_num = generate_receipt_number()
-        rental_price = selected_book["rental_price"]
-        deposit = round(rental_price * 0.2, 2)
-        
-        receipt = {
-            'receipt_num': receipt_num,
-            "name": name,
-            "address": address,
-            "phone": phone,
-            "email": email,
-            "book_id": receipt_id,
-            "book_name": selected_book["name"],
-            "borrow_date": now.date(),
-            "due_date": now.date() + datetime.timedelta(days=7),
-            "deposit": deposit,
-        }
-        print(f"\n{fg(216)}{attr('bold')}Thank you for borrowing {selected_book['name']}. Here is your receipt. {attr('reset')}") 
-
-        # create a table to display receipt information
-        show_receipt(receipt)
-
-        # update the selected book status and due date
-        selected_book["status"] = "unavailable"
-        selected_book["due_date"] = (now.date() + datetime.timedelta(days=7)).strftime("%Y-%m-%d")
-        selected_book["receipt_number"] = receipt_num
-
-        return selected_book
-
-
-# ===================================Return Book Function===============================================================
-
-def return_book(books):
-    # This function asks the user to input the receipt number to return the book,
-    # and also prompts them to rate the book they borrowed. Additionally,
-    # it can display a table showing the deposit paid and the remaining balance that the client needs to pay for the book.
-
-    while True:
-        try:
-            return_receipt_number = int(input(f"\n{fg(122)}Please enter your receipt number:  {attr(0)}"))
-            if return_receipt_number <= 0:
-                print(f"\n{fg(229)}Please enter a positive number. {attr(0)}")
-                continue
-            
-            for book in books:  
-                if book["receipt_number"] == int(return_receipt_number):
-                    print(f"\n{fg(226)}Thank you for returning {book['name']}. {attr(0)}")
-                    while True:
-                        try:
-                            current_book_rate = float(input(f"\n{fg(122)}Please rate the book you have borrowed:  {attr(0)}"))       
-                            if current_book_rate <= 0 or current_book_rate > 5:
-                                raise ValueError
-                        except ValueError:
-                            print(f"\n{fg(229)}Invalid input. Please enter a non-zero number (from 1-5)")
-                        else:
-                            average_rate = (book["book_rate"] + current_book_rate)/2
-                                          
-                            book["book_rate"] = float(format(average_rate, '.1f'))
-                            book["status"] = "available"
-                            book["due_date"] = "None"
-                            book["receipt_number"] = 0
-
-                            print(f"\n{fg(216)}{attr('bold')}Thank you for updating {book['name']}'s rate! {attr(0)}")
-                        
-                            due_balance = float(book["rental_price"] -  book["rental_price"] * 0.2)
-                            deposit = float(book["rental_price"] * 0.2)
-                            print(f"{fg(229)}\nPlease pay your due balance: ${due_balance:.2f} {attr(0)}")    
-                            due_balance_table = PrettyTable(
-                                ["Receipt Number", "Rental Price", "Deposit", "Due Balance"])
-                            due_balance_table.add_row(
-                                [return_receipt_number, book["rental_price"], f"{deposit:.2f}", "{:.2f}".format(due_balance)])
-                            print(due_balance_table)
-                            return book
-            else:
-                print(f"{fg(229)}\nThe number you entered is not in the list. Please double check your receipt number. {attr(0)}")    
-                break
-        except ValueError:
-            print(f"{fg(229)}\nInvalid input. Please enter a valid number. {attr(0)}")
-
-
-# =============================================Add Book Function===============================================================
-def add_book(books):
-    print(f"\n{fg(122)}Please enter the following information to add a book: {attr(0)}")
-
-    # add id from book list
-
-    max_id = max(int(book["id"]) for book in books)
-
-    book_name = validate_book_name()
-    book_author = validate_author_name()
-    # create a new book dictionary
-    new_book = {}
-    new_book["id"] = str(max_id + 1).zfill(3)
-    new_book["name"] = book_name
-    new_book["author"] = book_author
-    new_book["rental_price"] = 0.0
-    new_book["status"] = "unavailable"
-    new_book["due_date"] = "unavailable"
-    new_book["book_rate"] = 0.0
-    new_book["receipt_number"] = 0
-
-    books.append(new_book)
-
-    return books
-
-csv_file = 'db.csv'
-
-# check if csv file exists
-
-try: 
-    db_file = open(csv_file, 'r')
-    db_file.close()
-    print("Database file found.")
-except FileNotFoundError:
-    db_file.open(csv_file, 'w')
-    db_file.close()
-    print("file not found, creating new file...")
-
-def read_db(csv_file):
-    books = []
-    with open(csv_file, "r") as f:
-        reader = csv.DictReader(f)
-        for book in reader:
-            book["rental_price"] = float(book["rental_price"])
-            book["book_rate"] = float(book["book_rate"])
-            book["receipt_number"] = int(book["receipt_number"])
-            books.append(book)
-    return books
-
-
-def write_db(books, csv_file):
-    with open(csv_file, "w", newline="") as f:
-        columns = ["id", "name", "author", "rental_price",
-                   "status", "due_date", "book_rate", "receipt_number"]
-        writer = csv.DictWriter(f, fieldnames=columns)
-        writer.writeheader()
-        writer.writerows(books)
-
-
-def prompt_yes_or_no(prompt):
-    while True:
-        confirm_browse = input(prompt).lower()
-        if confirm_browse not in ["y", "n"]:
-            print(f"\n{fg(229)}Sorry, the option you have entered is not valid, please enter 'y' or 'n'. {attr(0)}")         
-        else:
-            return confirm_browse == "y"
+from return_book import return_book
+from add_book import add_book
+from display_books import display_books
+from select_book import select_book
+from borrow_book import borrow_book, prompt_yes_or_no
+from update_csv import write_db, read_db, csv_file
 
 # =============================================Main Function===============================================================
-
-
     
 def main():
 
@@ -372,7 +64,7 @@ def main():
                     if borrow_book(selected_book) is not None:
                         write_db(books, csv_file)
                 if not prompt_yes_or_no(f"\n{fg(117)}{attr('bold')}Do you want to continue to browse our book list? (y/n): {attr('reset')}"):
-                    print(f"\n{fg(216)}{attr('bold')}{attr('bold')}Thank you for using our online borrow book service.")
+                    print(f"\n{fg(216)}{attr('bold')}{attr('bold')}Thank you for using our online borrow book service. {attr('reset')}")
                     break
 
         # obtain user input2
@@ -384,11 +76,11 @@ def main():
                     write_db(books, csv_file)
                     print(f"{fg(229)}\nUpdated book list: {attr(0)}")
                     display_books(books)
-                    print(f"{fg(216)}{attr('bold')}\nThank you for using our online book return rental service.")
+                    print(f"{fg(216)}{attr('bold')}\nThank you for using our online book return rental service. {attr(0)}")
                     break
                 else:
                     if not prompt_yes_or_no(f"{fg(117)}{attr('bold')}\nDo you want to continue to return your book? (y/n):  {attr(0)}"):
-                        print(f"{fg(216)}{attr('bold')}\nThank you for using our online book return book service.") 
+                        print(f"{fg(216)}{attr('bold')}\nThank you for using our online book return book service. {attr(0)}") 
                         break
 
         # obtain user input3
@@ -406,10 +98,10 @@ def main():
         elif user_choice == "4":
             write_db(books, csv_file)
             print(f"{fg(216)}{attr('bold')}\nThank you for using our online book rental store. See you next time! {attr(0)}")           
-            continue
+            sys.exit()
 
         else:
-            print("\nInvalid input. Please enter a number from 1-4.")
+            print(f"{fg(229)}\nInvalid input. Please enter a number from 1-4. {attr(0)}")
             continue
 
 if __name__ == "__main__":
