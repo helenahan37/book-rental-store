@@ -1,11 +1,8 @@
 id,name,author,rental_price,status,due_date,book_rate,receipt_number
-001,Python Crash Course,Eric Matthes,17.9,unavailable,2023-05-02,2.3,21
-002,Web Scraping with Python,Ryan Mitchell,19.0,available,None,1.8,0
-003,Python Data Science Handbook,Jake VanderPlas,22.0,available,None,2.8,0
+001,Python Crash Course,Eric Matthes,17.9,available,None,3.5,0
+002,Web Scraping with Python,Ryan Mitchell,19.0,unavailable,2023-05-03,1.8,21
+003,Python Data Science Handbook,Jake VanderPlas,22.0,available,None,3.5,0
 004,Expert Python Programming,Tarek Ziade,15.7,unavailable,2023-05-14,3.0,10
 005,Python Network Programming,Dr. M. O. Faruque Sarker,23.5,available,None,4.2,0
-006,JKSL HAN,JKSHN,0.0,unavailable,unavailable,0.0,0
-007,fls ahn,jal shn,0.0,unavailable,unavailable,0.0,0
-008,jla hsn,TOM H.,0.0,unavailable,unavailable,0.0,0
-009,Python amazing,Jasphone Mason,0.0,unavailable,unavailable,0.0,0
-010,AMZIS: le,jwo_jay,0.0,unavailable,unavailable,0.0,0
+006,Python is Great,Tom Tom,0.0,unavailable,unavailable,0.0,0
+007,I love python,Le MEI,0.0,unavailable,unavailable,0.0,0

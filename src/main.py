@@ -100,6 +100,10 @@ def display_books(books):
         row = [book["id"], book["name"], book["author"], book["rental_price"],
                book["status"], book["due_date"], book["book_rate"], book["receipt_number"]]
         table.add_row(row)
+        for row in table._rows:
+            for i, cell in enumerate(row):
+                if cell ==0:
+                    row[i] = "NA"
     print(f"{fg('cyan')}{attr('bold')}\nHere is the list of books for rental: {attr('reset')}")
     print(table)
 
