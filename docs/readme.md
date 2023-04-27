@@ -1,6 +1,6 @@
-##T1A3 - Online Book Rental Store
+## T1A3 - Online Book Rental Store
 ---
-####GitHub Repository 
+#### GitHub Repository 
 
 **[Link to GitHub Repository](https://github.com/helenahan37/T1A3)**
 
