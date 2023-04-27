@@ -14,6 +14,6 @@ def display_books(books):
         for row in table._rows:
             for i, cell in enumerate(row):
                 if cell == 0:
-                    row[i] = "NA"
+                    row[i] = "N/A"
     print(f"{fg('cyan')}{attr('bold')}\nHere is the list of books for rental: {attr('reset')}")
     print(table)

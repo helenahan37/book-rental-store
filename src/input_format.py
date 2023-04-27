@@ -1,8 +1,6 @@
 import re
 from colored import fg, bg, attr
 
-
-
 # Regex
 email_regex = re.compile(
  r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')

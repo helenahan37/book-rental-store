@@ -4,6 +4,7 @@ from colored import fg, bg, attr
 
 from input_format import validate_name,validate_email, validate_address, validate_phone
 from receipt_table import generate_receipt_number, show_receipt
+from prompt_yes_no import prompt_yes_or_no
 
 
 def borrow_book(selected_book):
@@ -53,10 +54,3 @@ def borrow_book(selected_book):
         return selected_book
 
 
-def prompt_yes_or_no(prompt):
-    while True:
-        confirm_browse = input(prompt).lower()
-        if confirm_browse not in ["y", "n"]:
-            print(f"\n{fg(229)}Sorry, the option you have entered is not valid, please enter 'y' or 'n'. {attr(0)}")         
-        else:
-            return confirm_browse == "y"

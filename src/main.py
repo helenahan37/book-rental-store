@@ -1,29 +1,29 @@
 '''This is the main program for the book rental system.
 
-The program should present the customer with a list of services to choose from: 1. Borrow a book, 2. Return a book, 3. Quit.
-If the customer selects "Borrow a book," the program should print out a list of available books, books information, their due dates, rating starts and whether they are available for rental.
+The program should present the customer with a list of services to choose from: 1. Borrow a book, 2. Return a book, 3. Add book, 4. Quit
+1. If the customer selects "Borrow a book," the program should print out a list of available books, books information, their due dates, rating starts and whether they are available for rental.
 
-The program should then collect the customer's information and print a receipt that includes the customer's name,
+2. The program should then collect the customer's information and print a receipt that includes the customer's name,
 the date the book was borrowed, the due date, and the deposit amount.
 
-If the customer selects "Return a book," the program should prompt the customer to enter the receipt number for the book being returned. The program should then print out the amount due for the book and refund the deposit.
-when customer returned a book, the program should ask customer wether they want rate the book, and update the book rate information
+3. If the customer selects "Return a book," the program should prompt the customer to enter the receipt number for the book being returned. 
+The program should then print out the amount due for the book and refund the deposit.
+when customer returned a book, the program should ask customer to rate the book, and update the book rate information
 
-if customer rate the book, the program should calculate the new book rate and update the book rate information
-
-if customer don't rate the book, the program should print a message to tell customer they can rate the book later and quit the program
 '''
 
 from prettytable import PrettyTable
 from colored import fg, bg, attr
 import sys
+import csv
 
 from return_book import return_book
 from add_book import add_book
 from display_books import display_books
 from select_book import select_book
-from borrow_book import borrow_book, prompt_yes_or_no
+from borrow_book import borrow_book
 from update_csv import write_db, read_db, csv_file
+from prompt_yes_no import prompt_yes_or_no
 
 # =============================================Main Function===============================================================
     
