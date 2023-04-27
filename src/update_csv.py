@@ -7,7 +7,6 @@ csv_file = 'db.csv'
 try: 
     db_file = open(csv_file, 'r')
     db_file.close()
-    pass
 except FileNotFoundError:
     db_file.open(csv_file, 'w')
     db_file.close()

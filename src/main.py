@@ -76,11 +76,10 @@ def main():
                     write_db(books, csv_file)
                     print(f"{fg(229)}\nUpdated book list: {attr(0)}")
                     display_books(books)
-                    print(f"{fg(216)}{attr('bold')}\nThank you for using our online book return rental service. {attr(0)}")
+                    print(f"{fg(216)}{attr('bold')}\nThank you for using our online book return service. {attr(0)}")
                     break
                 else:
                     if not prompt_yes_or_no(f"{fg(117)}{attr('bold')}\nDo you want to continue to return your book? (y/n):  {attr(0)}"):
-                        print(f"{fg(216)}{attr('bold')}\nThank you for using our online book return book service. {attr(0)}") 
                         break
 
         # obtain user input3

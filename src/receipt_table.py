@@ -1,12 +1,19 @@
 from prettytable import PrettyTable
-from colored import fg, bg, attr
+import random
+
+
+generated_receipt_numbers = set()
 
 # create receipt number
-receipt_count = 20
 def generate_receipt_number():
-    global receipt_count
-    receipt_count += 1
-    return receipt_count
+    min_num = 10
+    max_num = 99
+    while True:
+        receipt_number = random.randint(min_num, max_num)
+        if receipt_number not in generated_receipt_numbers:
+            # If the receipt number is unique, add it to the set of generated numbers and return it
+            generated_receipt_numbers.add(receipt_number)
+            return receipt_number
 
 
 # define a receipt table
