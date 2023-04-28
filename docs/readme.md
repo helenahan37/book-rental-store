@@ -14,7 +14,7 @@ The Online Book Rental Store application, as the name suggests, is a convenient 
 
 
 ### Rent books:
-####Book list Table:
+#### Book list Table:
 This feature allows users to borrow a book online, it imports the 'PrettyTable' module to create a well-organized and easily readable table to present the book information stored in a CSV document to customers (a try-except statement has been used here to check if a CSV file exists). The table is constructed using the PrettyTable function, which defines the column headers. Next, the program iterates through a list of books, appending the data of each book as a row to the table. Finally, the program prints out the entire table containing all book details, making it simple for customers to comprehend the availability of each book. 
 ![Book list Table](./book%20list%20table.png)
 
@@ -25,7 +25,7 @@ When customers viewed the book list, the select book function prompts them to en
 If the book is not available, the program will use the imported datetime module to inform the customer of the number of days until the book becomes available again. This is done by subtracting the current date from the book's due date.
 ![time checker](./time%20checker.png)
 
-The program then updates the book list accordingly. Additionally, it uses a while loop to repeatedly ask the customer if they want to view the latest book information when borrowing, returning, or rating a book. If the customer agrees, the program displays the updated book information using the table.
+The program then updates the book list accordingly. Additionally, it uses a while loop to repeatedly ask the customer if they want to view the latest book information when borrowing, returning, or adding a book. If the customer agrees, the program displays the updated book information using the table.
 
 
 ### Return Books:
@@ -42,7 +42,7 @@ Overall, this feature provides a straightforward and user-friendly way for users
 ![return book feature](return%20book.png)
 
 ### Add books:
-This functionality is relatively straightforward. It allows users to add a new book to the online bookstore by entering its name and author. The 'add_book' function accepts a list of books from a CSV file as input. It then creates a new dictionary for the book based on the user's input for the name and author, which is validated using regular expressions and prompt statements. The new book's ID is added sequentially based on the current maximum value stored in the dictionary. The book's status and due date are marked as 'unavailable', which is used to determine the availability of the book when the user selects a book combined with the select book function. Other details, such as rental price, book rating, and receipt number, are not processed at this stage and are instead set to 'N/A', which can be updated by the admin later. Finally, the program adds the new book information to the 'books' list and returns the updated list.
+This feature is relatively straightforward. It allows users to add a new book to the online bookstore by entering its name and author. The "add_book" function accepts a list of books from the CSV file as input. It then creates a new dictionary for the book based on the user's input for the name and author, which is validated using regular expressions and prompt statements. The new book's ID is added sequentially based on the current maximum value stored in the dictionary. The book's status and due date are marked as 'unavailable', which is used to determine the availability of the book when the user selects a book combined with the select book function. Other details, such as rental price, book rating, and receipt number, are not processed at this stage and are instead set to "N/A", which can be updated by the admin later. Finally, the program adds the new book information to the "books" list and returns the updated list.
 
 ![add new book](Add%20new%20book.png)
 
