@@ -88,7 +88,6 @@ def main():
                 display_books(books)
                 add_book(books)
                 write_db(books, csv_file)
-                print(f"{fg(123)}{attr('bold')}\nThe book has been added to the list. It will be available in 7 days. {attr(0)}")
                 display_books(books)
                 if not prompt_yes_or_no(f"\n{fg(193)}{attr('bold')}Do you want to continue to add new book? (y/n):  {attr(0)}"):
                     print(f"\n{fg(216)}{attr('bold')}Thank you for using our online adding book service. {attr(0)}")

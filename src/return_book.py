@@ -8,16 +8,18 @@ def return_book(books):
     # it can display a table showing the deposit paid and the remaining balance that the client needs to pay for the book.
 
     while True:
+        # error handling for invalid input
         try:
             return_receipt_number = int(input(f"\n{fg(122)}Please enter your receipt number:  {attr(0)}"))
             if return_receipt_number <= 0:
-                print(f"\n{fg(229)}Please enter a positive number. {attr(0)}")
+                print(f"\n{fg(229)}Please enter a positive integer. {attr(0)}")
                 continue
-            
+            # check if the receipt number is in the book list
             for book in books:  
                 if book["receipt_number"] == int(return_receipt_number):
                     print(f"\n{fg(226)}Thank you for returning {book['name']}. {attr(0)}")
                     while True:
+                        # rate the book and update the book rate information
                         try:
                             current_book_rate = float(input(f"\n{fg(122)}Please rate the book you have borrowed:  {attr(0)}"))       
                             if current_book_rate <= 0 or current_book_rate > 5:
@@ -33,7 +35,7 @@ def return_book(books):
                             book["receipt_number"] = 0
 
                             print(f"\n{fg(216)}{attr('bold')}Thank you for updating {book['name']}'s rate! {attr(0)}")
-                        
+                            # deposit = rental price * 0.2
                             due_balance = float(book["rental_price"] -  book["rental_price"] * 0.2)
                             deposit = float(book["rental_price"] * 0.2)
                             print(f"{fg(229)}\nPlease pay your due balance: ${due_balance:.2f} {attr(0)}")    
@@ -44,8 +46,8 @@ def return_book(books):
                             print(due_balance_table)
                             return book
             else:
-                print(f"{fg(229)}\nThe number you entered is not in the list. Please double check your receipt number. {attr(0)}")    
+                print(f"{fg(229)}\nThe receipt number you entered is not on the list. Please double check your receipt number. {attr(0)}")    
                 break
         except ValueError:
-            print(f"{fg(229)}\nInvalid input. Please enter a valid number. {attr(0)}")
+            print(f"{fg(229)}\nInvalid input. Please enter a valid non-zero integer. {attr(0)}")
 

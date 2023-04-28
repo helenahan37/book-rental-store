@@ -19,7 +19,6 @@ def select_book(books):
         return
 
     selected_book = selected_book[0]
-
     if selected_book["status"] == "unavailable":
         if selected_book["due_date"] == "unavailable":
             print(f"\n{fg(226)}Sorry, the book will be add to our online store later, please check it after 7 days.")

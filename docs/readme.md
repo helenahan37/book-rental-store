@@ -1,43 +1,51 @@
-## T1A3 - Online Book Rental Store
+# T1A3 - Online Book Rental Store
 ---
-#### GitHub Repository 
+### GitHub Repository 
 
 **[Link to GitHub Repository](https://github.com/helenahan37/T1A3)**
 
 ***
-### Main Features And Functions:
-The online book rental store program, as its name suggests, is a convenient terminal program that allows customers to rent books, return books, and add books. It has the following main features and characteristics:
+## Main Features And Characteristics:
+The Online Book Rental Store application, as the name suggests, is a convenient terminal application that allows customers to repeatedly view the book listing, rent books, return books, and add books after starting to use the application. It has the following main features and characteristics:
 
----
-#### Borrow Book Function:
-This function allows users to borrow a book online. It first checks whether the book is available, and if so, prompts the user to enter their personal information. It then generates a receipt number and creates a dictionary to store the receipt information. The function also updates the status of the selected book and the due date. 
-
-#### Return Book Functions:
-
-This function prompts the user to input their receipt number to return a book and also requests them to rate the book they borrowed. Additionally, it can display a table that shows the deposit paid and the remaining balance that the client needs to pay for the book.
-
-#### Add Book Functions:
-
-This function allows the user to add a new book to the online bookstore by inputting its name and author. The function then creates a new dictionary to store the book's information and append the new book to the book's list.
-
-#### Features:
-##### Well-designed book list table
-
-The program imports the 'PrettyTable' module to create a well-organized and easily readable table to present the book information stored in a CSV document to customers. The table is constructed using the PrettyTable function, which defines the column headers. Next, the program iterates through a list of books, appending the data of each book as a row to the table. Finally, the program prints out the entire table containing all book details, making it simple for customers to comprehend the availability of each book.
+1. Customers can rent the books online and browse the inventory of books as a table.
+2. Customers can return the books at their convenience and get a receipt and rate the book they have borrowed.
+3. Customers can add new books to the store's inventory.
 
 
-#### Real-time updates information
-The program allows customers to borrow, return, and add books multiple times after the start of the program. It promptly updates the book information in the CSV file and displays it to the customer.
+### Rent books:
+####Book list Table:
+This feature allows users to borrow a book online, it imports the 'PrettyTable' module to create a well-organized and easily readable table to present the book information stored in a CSV document to customers (a try-except statement has been used here to check if a CSV file exists). The table is constructed using the PrettyTable function, which defines the column headers. Next, the program iterates through a list of books, appending the data of each book as a row to the table. Finally, the program prints out the entire table containing all book details, making it simple for customers to comprehend the availability of each book. 
+![Book list Table](./book%20list%20table.png)
 
-#### Book Availability Checker
-The program can determine whether a selected book is available for borrowing. If the book is not available, it will inform the customer when it will become available and the number of days until then.
+####Borrowed receipt:
+When customers viewed the book list, the select book function prompts them to enter a book ID. The program then searches the book list to determine if the book is available or not and informs the customer of their choice's availability through prompt statements. If the customer successfully chooses an available book, they can input their personal information (regex format used here) to receive a borrowed receipt. 
+![book receipt](./book%20receipt.png)
+
+If the book is not available, the program will use the imported datetime module to inform the customer of the number of days until the book becomes available again. This is done by subtracting the current date from the book's due date.
+![time checker](./time%20checker.png)
+
+The program then updates the book list accordingly. Additionally, it uses a while loop to repeatedly ask the customer if they want to view the latest book information when borrowing, returning, or rating a book. If the customer agrees, the program displays the updated book information using the table.
 
 
-#### Borrow Receipt
-The program can print a receipt after the customer borrows a book. The receipt includes the customer's contact information, book details, deposit, as well as the borrowing and returning time.
+### Return Books:
 
-#### Due Balance Receipt
-After the customer returns a book, the program will print a receipt which includes the customer's rental deposit and the remaining balance to be paid, to remind the customer to make payment.
+This feature allows users to return a book by entering its receipt number. It incorporates error handling using try-except statements to ensure a smooth user experience. The input's validity is checked by verifying that it's a positive integer and that it exists in the borrowed book list. If the input is invalid, the program prompts the user to enter a valid receipt number.
+
+When a book with a matching receipt number is found, it is marked as "available" and the due date and receipt number are removed. The user is then asked to rate the book on a scale of 1 to 5, and the program verifies that the input is within the acceptable range. If the user enters an invalid rating, they are prompted to re-enter a valid rating.
+
+If the rating is valid, the program calculates a new average rating for the book and updates it in the book list. Additionally, the program calculates the deposit and rental fee that the user must pay and displays them along with the details of the returned book.
+
+Overall, this feature provides a straightforward and user-friendly way for users to return books and update their ratings while ensuring the validity of the input and displaying relevant information to the user.
+
+
+![return book feature](return%20book.png)
+
+### Add books:
+This functionality is relatively straightforward. It allows users to add a new book to the online bookstore by entering its name and author. The 'add_book' function accepts a list of books from a CSV file as input. It then creates a new dictionary for the book based on the user's input for the name and author, which is validated using regular expressions and prompt statements. The new book's ID is added sequentially based on the current maximum value stored in the dictionary. The book's status and due date are marked as 'unavailable', which is used to determine the availability of the book when the user selects a book combined with the select book function. Other details, such as rental price, book rating, and receipt number, are not processed at this stage and are instead set to 'N/A', which can be updated by the admin later. Finally, the program adds the new book information to the 'books' list and returns the updated list.
+
+![add new book](Add%20new%20book.png)
+
 
 ---
 #### Code Style:

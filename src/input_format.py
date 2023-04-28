@@ -20,8 +20,6 @@ def validate_email():
             return email
 
 # define a function to validate phone number
-
-
 def validate_phone():
     while True:
         phone = input("Phone: ")
@@ -31,8 +29,6 @@ def validate_phone():
             return phone
 
 # define a function to validate name
-
-
 def validate_name():
     while True:
         name = input("Name: ")
@@ -41,7 +37,7 @@ def validate_name():
         else:
             return name
 
-
+ # define a function to validate address
 def validate_address():
     while True:
         address = input("Address: ")
@@ -49,7 +45,8 @@ def validate_address():
             print(f"\n{fg(229)}Sorry, the address you have entered is not valid, please try again, format: 7-50 characters, only letters, numbers and space. {attr(0)}")
         else:
             return address
-
+        
+# define a function to validate book name
 def validate_book_name():
     while True:
         book_name = input("Book Name: ")
@@ -58,6 +55,7 @@ def validate_book_name():
         else:
             return book_name
         
+# define a function to validate book author        
 def validate_author_name():
     while True:
         book_author = input("Book Author: ")

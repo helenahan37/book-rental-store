@@ -4,5 +4,4 @@ id,name,author,rental_price,status,due_date,book_rate,receipt_number
 003,Python Data Science Handbook,Jake VanderPlas,22.0,available,None,3.6,0
 004,Expert Python Programming,Tarek Ziade,15.7,unavailable,2023-05-14,3.0,10
 005,Python Network Programming,Dr. M. O. Faruque Sarker,23.5,available,None,4.2,0
-006,Python is Great,Tom Tom,0.0,unavailable,unavailable,0.0,0
-007,I Love Python,Mart A. King,0.0,unavailable,unavailable,0.0,0
+006,I love python,Helena.Han,0.0,unavailable,unavailable,0.0,0

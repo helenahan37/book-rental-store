@@ -24,5 +24,6 @@ def add_book(books):
     new_book["receipt_number"] = 0
 
     books.append(new_book)
+    print(f"{fg(123)}{attr('bold')}\n{book_name} has been added to the list and will become available in 7 days.{attr(0)}")
 
     return books
