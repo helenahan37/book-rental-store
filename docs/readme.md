@@ -3,6 +3,12 @@
 ### GitHub Repository 
 
 **[Link to GitHub Repository](https://github.com/helenahan37/T1A3)**
+***
+### Trello Board
+
+**[Link to Trello Board](https://trello.com/b/pEMan2li/online-book-rental-store)**
+***
+### Presentation
 
 ***
 ## Main Features And Characteristics:
@@ -15,14 +21,18 @@ The Online Book Rental Store application, as the name suggests, is a convenient 
 
 ### Rent books:
 #### Book list Table:
-This feature allows users to borrow a book online, it imports the 'PrettyTable' module to create a well-organized and easily readable table to present the book information stored in a CSV document to customers (a try-except statement has been used here to check if a CSV file exists). The table is constructed using the PrettyTable function, which defines the column headers. Next, the program iterates through a list of books, appending the data of each book as a row to the table. Finally, the program prints out the entire table containing all book details, making it simple for customers to comprehend the availability of each book. 
+This feature allows users to borrow a book online, it imports the 'PrettyTable' module to create a well-organized and easily readable table to present the book information stored in a CSV document to customers (a try-except statement has been used here to check if a CSV file exists). The table is constructed using the PrettyTable function, which defines the column headers. Next, the program iterates through a list of books, appending the data of each book as a row to the table. 
+
+Finally, the program prints out the entire table containing all book details, making it simple for customers to comprehend the availability of each book. 
 ![Book list Table](./book%20list%20table.png)
 
 #### Borrowed receipt:
-When customers viewed the book list, the select book function prompts them to enter a book ID. The program then searches the book list to determine if the book is available or not and informs the customer of their choice's availability through prompt statements. If the customer successfully chooses an available book, they can input their personal information (regex format used here) to receive a borrowed receipt. 
+When customers viewed the book list, the select book function prompts them to enter a book ID. The program then searches the book list to determine if the book is available or not and informs the customer of their choice's availability through prompt statements. 
+
+If the customer successfully chooses an available book, they can input their personal information (regex format used here) to receive a borrowed receipt. 
 ![book receipt](./book%20receipt.png)
 
-If the book is not available, the program will use the imported datetime module to inform the customer of the number of days until the book becomes available again. This is done by subtracting the current date from the book's due date.
+If the book is not available, the program will use the imported "datetime" module to inform the customer of the number of days until the book becomes available again. This is done by subtracting the current date from the book's due date.
 ![time checker](./time%20checker.png)
 
 The program then updates the book list accordingly. Additionally, it uses a while loop to repeatedly ask the customer if they want to view the latest book information when borrowing, returning, or adding a book. If the customer agrees, the program displays the updated book information using the table.
@@ -55,149 +65,48 @@ Here is the screenshot of my Trello Board:
 ![Trello1](Trello1.png)
 ![Trello2](Trello2.png)
 
-## Installation Guide:
+
+## Help Documentation
+### Installation Guide:
 
 To install and run this program
 
 1. Open the terminal and create a directory or navigate to one you wish the project to go.
-2. Copy the following the link ```git@github.com:helenahan37/T1A3.git``` into your terminal hit enter
-3. Navigate to source file by ```cd src ```
+2. Copy the following command  ```git clone git@github.com:helenahan37/T1A3.git``` into your terminal and hit enter
+3. Navigate to the source file by ```cd T1A3/src ```
 4. This project required Python3, please check your Python version by run ```chmod +x python_version_check.sh``` and ```./python_version_check.sh``` 
 5. Check venv environment by run ```chmod +x venv_check.sh``` and ```./venv_check.sh```
 6. Now you can run ```./run.sh``` to start the app
+
+### Dependencies:
+The project requires the following dependencies, you can install all of them by run ```run.sh```
+```
+colored==1.4.4
+iniconfig==2.0.0
+mock==5.0.2
+packaging==23.1
+pluggy==1.0.0
+prettytable==3.7.0
+pytest==7.3.1
+wcwidth==0.2.6
+```
+
+### System/hardware Requirements:
+
+- 8GM of RAM or more
+- macOS Ventura 13.0 or higher
 
 ## Testing Doc
 
 The testing for this project involves a combination of manual and automated testing.
 
-Here is some examples' of automated testing using Pytest: 
+Here are some examples of automated testing using pyTest: 
 
-1. Testing Case 1:
+[test_case.py](../src/test_case.py)
+## Manual Testing Ledger:
+**[Link to Manual Testing Ledger](https://docs.google.com/spreadsheets/d/1Spjjr21O0xiv_KOr_VqqY-MLBG3ZR-DYsB5CUbTipL8/edit#gid=0)**
 
-This test case is testing whether the name entered by the user matches the regular expression pattern defined in name_regex, 
-which specifies that the name can include letters, dots (.), spaces, and underscores (_).
-
-```
-# test case 1: name contains only letters and underscores - pass
-def test_validate_name(monkeypatch):
-    monkeypatch.setattr('builtins.input', lambda _: "Mart_Damon")
-    assert validate_name() == "Mart_Damon"
-```
-```
-# test case 2: name contains only letters and spaces - pass
-def test_validate_name2(monkeypatch):
-    monkeypatch.setattr('builtins.input', lambda _: "Mart Damon")
-    assert validate_name() == "Mart Damon
-```
-```
-# test case 3: name contains only letters and dots - pass
-def test_validate_name3(monkeypatch):
-    monkeypatch.setattr('builtins.input', lambda _: "Mart.Damon")
-    assert validate_name() == "Mart.Damon"
-```
-
-2. Testing Case 2:
-
-This test case is designed to verify whether the function correctly calculates 
-the average rating of a book based on user input and the book's current rating, 
-and updates the book's rating with the calculated value.
-
-```
-# Test Case 1: Average rate updated correctly - pass
-def test_average_rate_calculation():
-    # create a sample book with initial book rate
-    book = {
-        "name": "Python is Great",
-        "author": "F. Scott Fitzgerald",
-        "book_rate": 3.5,
-        "status": "unavailable",
-        "due_date": "2023-05-01",
-        "receipt_number": 12
-    }
-    
-    # simulate user input to rate the book
-    current_book_rate = 4.0
-    
-    # calculate the expected average rate
-    expected_average_rate = (book["book_rate"] + current_book_rate) / 2
-    
-    # update the book's rate with the expected average rate
-    book["book_rate"] = expected_average_rate
-    
-    # assert that the book's rate has been updated correctly
-    assert book["book_rate"] == 3.75
-```
-```
-# Test Case 2: Average rate calculate correctly - pass
-def test_average_rate_calculation2():
-# create a sample book with initial book rate
-    book = {
-        "name": "Python is Great",
-        "author": "F. Scott Fitzgerald",
-        "book_rate": 3.5,
-        "status": "unavailable",
-        "due_date": "2023-05-01",
-        "receipt_number": 12
-    }
-
-    # simulate user input to rate the book
-    current_book_rate = 5
-
-    # calculate the expected average rate
-    expected_average_rate = (book["book_rate"] + current_book_rate) / 2
-
-    # assert that the book's rate has been calculate correctly
-    assert expected_average_rate == 4.25
-```
-Testing Case 3: 
-This test case is designed to verify if the max id is correctly collected from the book list.
-```
-#Test Case 1 : Max id is correctly collected from the book list - pass
-def test_get_max_id():
-    books = [
-        {"id": "001", "name": "Book A", "author": "Author A", "rental_price": 0.0, "status": "unavailable", "due_date": "unavailable", "book_rate": 0.0, "receipt_number": 0},
-        {"id": "002", "name": "Book B", "author": "Author B", "rental_price": 0.0, "status": "unavailable", "due_date": "unavailable", "book_rate": 0.0, "receipt_number": 0}
-    ]
-    assert get_max_id(books) == 2
-```
-```    
-#Test Case 2 : assert value is false, max id is not correctly collected from the book list - raise ValueError
-
-def test_get_max_id1():
-    books = [
-        {"id": "001", "name": "Book A", "author": "Author A", "rental_price": 0.0, "status": "unavailable", "due_date": "unavailable", "book_rate": 0.0, "receipt_number": 0},
-        {"id": "002", "name": "Book B", "author": "Author B", "rental_price": 0.0, "status": "unavailable", "due_date": "unavailable", "book_rate": 0.0, "receipt_number": 0}
-    ]
-
-    max_id = get_max_id(books)
-    assert max_id == 3, f"Expected max_id to be 3, but got {max_id}."
-    raise ValueError("Incorrect max_id value.")
-```
-```
-# Test Case 3: expected_id is correctly added to new book lists - pass
-'''This test case is designed to verify if the book id correctly +1 to the book list when add a new book.'''
-def test_add_book():
-    # Set up test data
-    books = [
-        {"id": "001", "name": "Book A", "author": "Author A", "rental_price": 0.0, "status": "unavailable", "due_date": "unavailable", "book_rate": 0.0, "receipt_number": 0},
-        {"id": "002", "name": "Book B", "author": "Author B", "rental_price": 0.0, "status": "unavailable", "due_date": "unavailable", "book_rate": 0.0, "receipt_number": 0}
-    ]
-    
-    # Mock input values
-    mock_input = Mock(side_effect=["Test Book", "Test Author"])
-
-    # Get the expected ID
-    expected_id = str(get_max_id(books) + 1).zfill(3)
-
-    with patch('builtins.input', mock_input):
-        new_books = add_book(books)
-
-    # Get the actual ID of the last book in the list
-    actual_id = new_books[-1]["id"]
-
-    # Assert that the new book has the expected ID
-    assert actual_id == expected_id
-```
+![Manual test screenshot](./manual%20test.png)
 
 ---
 ## Code Style:
@@ -208,6 +117,21 @@ Please refer to the following link for more details:
 **[PEP 8 – Style Guide for Python Code](https://peps.python.org/pep-0008/)**
 
 ***
+
+## Reference:
+
+[Simulating single and multiple inputs using pyTest and monkeypatch](https://pavolkutaj.medium.com/simulating-single-and-multiple-inputs-using-pytest-and-monkeypatch-6968274f7eb9)
+
+[regex_email](https://stackabuse.com/python-validate-email-address-with-regular-expressions-regex/)
+
+[regex_phone](https://codingnconcepts.com/java/java-regex-to-validate-phone-number/#regex-to-match-10-digit-phone-number-with-no-space)
+
+[regex_address](https://www.w3schools.com/python/python_regex.asp)
+
+[Detect python version](https://stackoverflow.com/questions/6141581/detect-python-version-in-shell-script)
+
+
+
 
 
 

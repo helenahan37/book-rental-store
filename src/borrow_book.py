@@ -21,8 +21,6 @@ def borrow_book(selected_book):
         phone = validate_phone()
         receipt_id = selected_book["id"]
         # create a receipt dictionary to store the receipt information
-        # print(selected_book)
-
         now = datetime.datetime.now()
 
         receipt_num = generate_receipt_number()

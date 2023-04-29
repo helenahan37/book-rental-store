@@ -4,7 +4,7 @@ from colored import fg, bg, attr
 
 # define a function to display book list
 def display_books(books):
- # define a table to display book list
+ # create a table to display book list
     table = PrettyTable(["ID", "Name", "Author", "Rental Price",
                         "Status", "Due Date", "Book Rate", "Receipt Number"])
     for book in books:
