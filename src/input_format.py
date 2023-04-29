@@ -5,7 +5,7 @@ from colored import fg, bg, attr
 email_regex = re.compile(
  r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
 phone_regex = re.compile(r'^0\d{9}$')
-name_regex = re.compile(r'^[A-Za-z][A-Za-z_. ]{5,20}[A-Za-z]$')
+name_regex = re.compile(r'^[A-Za-z][A-Za-z_.\s]{5,20}[A-Za-z]$')
 address_regex = re.compile(r'^[\d\s\w]{10,50}$')
 book_name_regex = re.compile(r'^(?=.*[a-zA-Z0-9])[a-zA-Z0-9\s\-\.:]{5,20}$')
 
@@ -33,7 +33,7 @@ def validate_name():
     while True:
         name = input("Name: ")
         if not name_regex.match(name):
-            print(f"\n{fg(229)}Sorry, the name you have entered is not valid, please try again, format: 5-20 characters, only letters, space, dot and underscore. {attr(0)}")
+            print(f"\n{fg(229)}Sorry, the name you have entered is not valid, please try again, format: 7-22 characters, only letters, space, dot and underscore. {attr(0)}")
         else:
             return name
 

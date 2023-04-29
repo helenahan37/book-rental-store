@@ -107,6 +107,8 @@ Here are some examples of automated testing using pyTest:
 **[Link to Manual Testing Ledger](https://docs.google.com/spreadsheets/d/1Spjjr21O0xiv_KOr_VqqY-MLBG3ZR-DYsB5CUbTipL8/edit#gid=0)**
 
 ![Manual test screenshot](./manual%20test.png)
+![Manual test screenshot2](./manual%20test2.png)
+
 
 ---
 ## Code Style:
@@ -120,15 +122,16 @@ Please refer to the following link for more details:
 
 ## Reference:
 
-[Simulating single and multiple inputs using pyTest and monkeypatch](https://pavolkutaj.medium.com/simulating-single-and-multiple-inputs-using-pytest-and-monkeypatch-6968274f7eb9)
+Kutaj, P. Simulating Single and Multiple Inputs using PyTest and Monkeypatch. *Search Medium*. Retrieved April 26, 2023, from https://pavolkutaj.medium.com/simulating-single-and-multiple-inputs-using-pytest-and-monkeypatch-6968274f7eb9
 
-[regex_email](https://stackabuse.com/python-validate-email-address-with-regular-expressions-regex/)
+Malik, U. (2021, June 8). Python: Validate Email Address with Regular Expressions (Regex). *StackAbuse*. https://stackabuse.com/python-validate-email-address-with-regular-expressions-regex/
 
-[regex_phone](https://codingnconcepts.com/java/java-regex-to-validate-phone-number/#regex-to-match-10-digit-phone-number-with-no-space)
+CodingNConcepts. Java Regex to Validate Phone Number. Retrieved April 17, 2023, from https://codingnconcepts.com/java/java-regex-to-validate-phone-number/#regex-to-match-10-digit-phone-number-with-no-space
 
-[regex_address](https://www.w3schools.com/python/python_regex.asp)
+Python RegEx. *W3Schools*. Retrieved April 16, 2023, from https://www.w3schools.com/python/python_regex.asp
 
-[Detect python version](https://stackoverflow.com/questions/6141581/detect-python-version-in-shell-script)
+Detect Python version in shell script. *Stack Overflow* Retrieved April 29, 2023, from https://stackoverflow.com/questions/6141581/detect-python-version-in-shell-script
+
 
 
 
