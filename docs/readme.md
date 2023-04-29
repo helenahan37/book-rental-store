@@ -104,7 +104,7 @@ Here are some examples of automated testing using pyTest:
 
 [test_case.py](../src/test_case.py)
 
-####Test1:
+#### Test1:
 This test is designed to test if the return_book function can successfully return a borrowed book with a valid receipt number and rating.
 
 Test Case 1:
@@ -120,6 +120,7 @@ def sample_books():
         {"name": "Book C", "rental_price": 15, "book_rate": 4.8, "status": "unavailable", "due_date": "2023-05-03", "receipt_number": 2},
     ]
     return books
+
 def test_return_book_success(sample_books, mocker):
     # mock user input
     mocker.patch("builtins.input", side_effect=["1", "4.2"])
@@ -204,7 +205,7 @@ def test_add_book_already_exists(capsys):
     with patch('builtins.input', side_effect=["Python is amazing", "Helena Han"]):
         add_book(books)
 
-    # Assert that the book is not added to the list
+    # Assert that the book is already in the list and won't add again
     captured = capsys.readouterr()
     assert "Book 'Python is amazing' already exists in the list." in captured.out
 ```
