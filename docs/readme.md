@@ -103,6 +103,102 @@ The testing for this project involves a combination of manual and automated test
 Here are some examples of automated testing using pyTest: 
 
 [test_case.py](../src/test_case.py)
+Test1:
+This test is designed to test if the return_book function can successfully return a borrowed book with a valid receipt number and rating.
+
+Test Case 1:
+test_return_book_success() tests that when a user returns a borrowed book by entering a valid receipt number and rating, the function can correctly update the book's status, due date, receipt number, and rating, and return the updated book.
+```python
+# test case1- returning a borrowed book with a valid receipt number and rating -pass
+
+def test_return_book_success(sample_books, mocker):
+    # mock user input
+    mocker.patch("builtins.input", side_effect=["1", "4.2"])
+    
+    # call the function
+    returned_book = return_book(sample_books)
+    
+    # assert the book status, due date, receipt number, and book rate are updated correctly
+    assert returned_book == {"name": "Book A", "rental_price": 10, "book_rate": 4.3, "status": "available", "due_date": "None", "receipt_number": 0}
+```
+
+Test Case 2:
+test_return_book_invalid_receipt_number() tests that when a user enters an invalid receipt number, the function returns a None value without updating the book information.
+```python
+def test_return_book_invalid_receipt_number(sample_books, mocker):
+    # mock user input
+    mocker.patch("builtins.input", return_value="4")
+    
+    # call the function
+    returned_book = return_book(sample_books)
+    
+    # assert the function returns None
+    assert returned_book is None
+```
+Test 2:
+This test mainly tests the functionality of the add_book() function, whether it can correctly add consecutive book IDs, and whether the program will report an error when the customer inputs an existing book name。
+
+Test Case 1:
+```python
+def get_max_id(books):
+    return max(int(book["id"]) for book in books)
+#Test Case 1 : Max id is correctly collected from the book list - pass
+def test_get_max_id():
+    books = [
+        {"id": "001", "name": "Book A", "author": "Author A", "rental_price": 0.0, "status": "unavailable", "due_date": "unavailable", "book_rate": 0.0, "receipt_number": 0},
+        {"id": "002", "name": "Book B", "author": "Author B", "rental_price": 0.0, "status": "unavailable", "due_date": "unavailable", "book_rate": 0.0, "receipt_number": 0}
+    ]
+    assert get_max_id(books) == 2
+```
+```python
+# Test Case 2: expected_id is correctly added to new book lists - pass
+'''This test case is designed to verify if the book id correctly +1 to the book list when add a new book.'''
+def test_add_book():
+    # Set up test data
+    books = [
+        {"id": "001", "name": "Book A", "author": "Author A", "rental_price": 0.0, "status": "unavailable", "due_date": "unavailable", "book_rate": 0.0, "receipt_number": 0},
+        {"id": "002", "name": "Book B", "author": "Author B", "rental_price": 0.0, "status": "unavailable", "due_date": "unavailable", "book_rate": 0.0, "receipt_number": 0}
+    ]
+    
+    # Mock input values
+    mock_input = Mock(side_effect=["Test Book", "Test Author"])
+
+    # Get the expected ID
+    expected_id = str(get_max_id(books) + 1).zfill(3)
+
+    with patch('builtins.input', mock_input):
+        new_books = add_book(books)
+
+    # Get the actual ID of the last book in the list
+    actual_id = new_books[-1]["id"]
+
+    # Assert that the new book has the expected ID
+    assert actual_id == expected_id
+```
+```python
+# Test Case 3: Book name already exists in the list - pass
+def test_add_book_already_exists(capsys):
+    books = [
+        {
+            "id": "001",
+            "name": "Python is amazing",
+            "author": "Helena Han",
+            "rental_price": 0.0,
+            "status": "unavailable",
+            "due_date": "unavailable",
+            "book_rate": 0.0,
+            "receipt_number": 0
+        }
+    ]
+    # Mock input values
+    with patch('builtins.input', side_effect=["Python is amazing", "Helena Han"]):
+        add_book(books)
+        
+    # Assert that the book is not added to the list
+    captured = capsys.readouterr()
+    assert "Book 'Python is amazing' already exists in the list." in captured.out
+```
+
 ## Manual Testing Ledger:
 **[Link to Manual Testing Ledger](https://docs.google.com/spreadsheets/d/1Spjjr21O0xiv_KOr_VqqY-MLBG3ZR-DYsB5CUbTipL8/edit#gid=0)**
 
