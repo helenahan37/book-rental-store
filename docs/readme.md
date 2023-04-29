@@ -130,10 +130,10 @@ CodingNConcepts. Java Regex to Validate Phone Number. Retrieved April 17, 2023, 
 
 Python RegEx. *W3Schools*. Retrieved April 16, 2023, from https://www.w3schools.com/python/python_regex.asp
 
-Detect Python version in shell script. *Stack Overflow* Retrieved April 29, 2023, from https://stackoverflow.com/questions/6141581/detect-python-version-in-shell-script
+Detect Python version in shell script. *Stack Overflow* Retrieved April 23, 2023, from https://stackoverflow.com/questions/6141581/detect-python-version-in-shell-script
 
 
-
+System Requirements. *TechTerms*. Retrieved April 28, 2023, from https://techterms.com/definition/system_requirements
 
 
 
