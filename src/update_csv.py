@@ -1,14 +1,14 @@
 import csv
 
-csv_file = 'db.csv'
+csv_file = "db.csv"
 
 # check if csv file exists
 
 try: 
-    db_file = open(csv_file, 'r')
+    db_file = open(csv_file, "r")
     db_file.close()
 except FileNotFoundError:
-    db_file.open(csv_file, 'w')
+    db_file.open(csv_file, "w")
     db_file.close()
     print("file not found, creating new file...")
 

@@ -10,20 +10,28 @@ def add_book(books):
 
     max_id = max(int(book["id"]) for book in books)
 
-    book_name = validate_book_name()
-    book_author = validate_author_name()
-    # create a new book dictionary
-    new_book = {}
-    new_book["id"] = str(max_id + 1).zfill(3)
-    new_book["name"] = book_name
-    new_book["author"] = book_author
-    new_book["rental_price"] = 0.0
-    new_book["status"] = "unavailable"
-    new_book["due_date"] = "unavailable"
-    new_book["book_rate"] = 0.0
-    new_book["receipt_number"] = 0
+    try:
+        book_name = validate_book_name()
+        book_author = validate_author_name()
+        for book in books:
+             if book["name"].lower() == book_name.lower():
+                raise ValueError(f"\nBook '{book_name}' already exists in the list.")
 
-    books.append(new_book)
-    print(f"{fg(123)}{attr('bold')}\n{book_name} has been added to the list and will become available in 7 days.{attr(0)}")
+        # create a new book dictionary
+        new_book = {}
+        new_book["id"] = str(max_id + 1).zfill(3)
+        new_book["name"] = book_name
+        new_book["author"] = book_author
+        new_book["rental_price"] = 0.0
+        new_book["status"] = "unavailable"
+        new_book["due_date"] = "unavailable"
+        new_book["book_rate"] = 0.0
+        new_book["receipt_number"] = 0
 
+        books.append(new_book)
+        print(f"{fg(123)}{attr('bold')}\n{book_name} has been added to the list and will become available in 7 days.{attr(0)}")
+        
+    except ValueError as e:
+        print(f"{fg(229)}{str(e)}{attr(0)}")
+    
     return books

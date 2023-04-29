@@ -10,7 +10,7 @@ from unittest.mock import patch, Mock
 # Test 1
 '''
 This test case is testing whether the name entered by the user matches the regular expression pattern defined in name_regex, 
-which specifies that the name can includes letters, dots (.), spaces, and underscores (_).
+which specifies that the name can include letters, dots (.), spaces, and underscores (_).
 '''
 
 # test case 1: name contains only letters and underscores - pass
@@ -106,7 +106,7 @@ def test_get_max_id1():
     assert max_id == 3, f"Expected max_id to be 3, but got {max_id}."
     raise ValueError("Incorrect max_id value.")
 
-# Test 4 expected_id is correctly added to new book lists - pass
+# Test Case 3: expected_id is correctly added to new book lists - pass
 '''This test case is designed to verify if the book id correctly +1 to the book list when add a new book.'''
 def test_add_book():
     # Set up test data

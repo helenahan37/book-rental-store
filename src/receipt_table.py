@@ -1,6 +1,12 @@
 from prettytable import PrettyTable
 import random
+import csv
+from update_csv import csv_file
 
+
+with open(csv_file, "r") as f:
+    reader = csv.reader(f)
+    existing_receipt_numbers = set([(row[-1]) for row in reader])
 
 generated_receipt_numbers = set()
 
@@ -10,7 +16,7 @@ def generate_receipt_number():
     max_num = 99
     while True:
         receipt_number = random.randint(min_num, max_num)
-        if receipt_number not in generated_receipt_numbers:
+        if receipt_number not in generated_receipt_numbers and receipt_number not in existing_receipt_numbers:
             # If the receipt number is unique, add it to the set of generated numbers and return it
             generated_receipt_numbers.add(receipt_number)
             return receipt_number

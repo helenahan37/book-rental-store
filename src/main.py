@@ -99,7 +99,7 @@ def main():
             sys.exit()
 
         else:
-            print(f"{fg(229)}\nInvalid input. Please enter a number from 1-4. {attr(0)}")
+            print(f"{fg(229)}\nInvalid input. Please enter a integer number from 1-4. {attr(0)}")
             continue
 
 if __name__ == "__main__":
