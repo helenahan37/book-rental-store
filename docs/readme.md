@@ -30,7 +30,7 @@ Finally, the program prints out the entire table containing all book details, ma
 When customers viewed the book list, the select book function prompts them to enter a book ID. The program then searches the book list to determine if the book is available or not and informs the customer of their choice's availability through prompt statements. 
 
 If the customer successfully chooses an available book, they can input their personal information (regex format used here) to receive a borrowed receipt. 
-![book receipt](./book%20receipt.png)
+![borrowed receipt](./borrowed%20receipt.png)
 
 If the book is not available, the program will use the imported "datetime" module to inform the customer of the number of days until the book becomes available again. This is done by subtracting the current date from the book's due date.
 ![time checker](./time%20checker.png)
