@@ -4,12 +4,10 @@ from input_format import validate_name
 from unittest.mock import patch
 import pytest
 from add_book import add_book
-from unittest.mock import patch, Mock, MagicMock
-import datetime
+from unittest.mock import patch, Mock
 from borrow_book import borrow_book
 from input_format import validate_name,validate_email, validate_address, validate_phone
 from return_book import return_book
-import builtins
 
 # Test1 
 ''' This test is designed to test if the return_book function can successfully return a borrowed book with a valid receipt number and rating.'''
