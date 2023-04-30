@@ -59,7 +59,7 @@ def main():
             while True:
                 display_books(books)
                 selected_book = select_book(books)
-                # if client select and confirm to borrow o book, update the book list
+                # if client select and confirm to borrow a book, update the book list
                 if selected_book is not None:
                     if borrow_book(selected_book) is not None:
                         write_db(books, csv_file)

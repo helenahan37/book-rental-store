@@ -18,7 +18,6 @@ The Online Book Rental Store application, as the name suggests, is a convenient 
 2. Customers can return the books at their convenience and get a receipt and rate the book they have borrowed.
 3. Customers can add new books to the store's inventory.
 
-
 ### Rent books:
 #### Book list Table:
 This feature allows users to borrow a book online, it imports the 'PrettyTable' module to create a well-organized and easily readable table to present the book information stored in a CSV document to customers (a try-except statement has been used here to check if a CSV file exists). The table is constructed using the PrettyTable function, which defines the column headers. Next, the program iterates through a list of books, appending the data of each book as a row to the table. 
@@ -59,6 +58,10 @@ This feature is relatively straightforward. It allows users to add a new book to
 ## Software Development Plan:
 When choosing a programming project, my goal was to implement functions within a program that could allow for adding, removing, and manipulating list items, performing simple mathematical operations, reading/saving files and combining with nested control structures. After considering these factors, I decided to choose the online book rental store project. This idea was also approved by the educator in our class group.
 
+Here is the flowchart of my project:
+## Flowchart
+![flowchart](./flowchart.png)
+
 The entire project is being managed and tracked through Trello. This software allows me to categorize my project into different tags based on their functionalities and features, and further subdivide them into different items. I have classified these items based on their level of importance and set estimated completion times. These details will be adjusted and updated as the program progresses.
 
 Here is the screenshot of my Trello Board:
@@ -71,7 +74,7 @@ Here is the screenshot of my Trello Board:
 
 To install and run this program
 
-1. Open the terminal and create a directory or navigate to one you wish the project to go.
+1. Open the terminal and create a directory or navigate to the one you wish the project to go.
 2. Copy the following command  ```git clone git@github.com:helenahan37/T1A3.git``` into your terminal and hit enter
 3. Navigate to the source file by ```cd T1A3/src ```
 4. This project required Python3, please check your Python version by run ```chmod +x python_version_check.sh``` and ```./python_version_check.sh``` 
@@ -149,6 +152,7 @@ def test_return_book_invalid_receipt_number(sample_books, mocker):
 This test mainly tests the functionality of the add_book() function, whether it can correctly add consecutive book IDs, and whether the program will report an error when the customer inputs an existing book name。
 
 Test Case 1:
+
 This test case is designed to test if the max id in the book list can be correctly collected, which takes a list of books and returns the maximum ID value of all the books in the list.
 
 The test case creates a sample list of books with two books, each with a unique ID. The test then calls the get_max_id function with this list and checks if the function returns the correct maximum ID value, which should be 2.
@@ -193,6 +197,7 @@ def test_add_book():
     assert actual_id == expected_id
 ```
 Test Case 3:
+
 This test case is designed to test when a user attempts to add a book to the book list that already exists.
 
 The test case sets up a sample list of books with one existing book, which has the name "Python is amazing" and the author "Helena Han". The test then mocks user input values for a new book with the same name and author as the existing book, and calls the add_book function with this list.
