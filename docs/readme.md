@@ -111,6 +111,7 @@ Here are some examples of automated testing using pyTest:
 This test is designed to test if the return_book function can successfully return a borrowed book with a valid receipt number and rating.
 
 Test Case 1:
+
 test_return_book_success() tests that when a user returns a borrowed book by entering a valid receipt number and rating, the function can correctly update the book's status, due date, receipt number, and rating, and return the updated book. The mocked user input simulates the user entering a valid receipt number 1 and rating 4.2 for the book that they are returning. The return_book function updates the book status to "available", sets the due date to "None", and updates the book rate with the average of the current book rate and the user's rating. The expected output which is (4.5+4.2)/2=4.3 (only keeps one decimal place) in the assert statement matches the updated book data with the correct values.
 ```python
 # test case1- returning a borrowed book with a valid receipt number and rating -pass
@@ -136,6 +137,7 @@ def test_return_book_success(sample_books, mocker):
 ```
 
 Test Case 2:
+
 test_return_book_invalid_receipt_number() tests that when a user enters an invalid receipt number 4, the function returns a None value without updating the book information.
 ```python
 def test_return_book_invalid_receipt_number(sample_books, mocker):
