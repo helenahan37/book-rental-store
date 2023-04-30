@@ -108,7 +108,7 @@ Here are some examples of automated testing using pyTest:
 This test is designed to test if the return_book function can successfully return a borrowed book with a valid receipt number and rating.
 
 Test Case 1:
-test_return_book_success() tests that when a user returns a borrowed book by entering a valid receipt number and rating, the function can correctly update the book's status, due date, receipt number, and rating, and return the updated book.
+test_return_book_success() tests that when a user returns a borrowed book by entering a valid receipt number and rating, the function can correctly update the book's status, due date, receipt number, and rating, and return the updated book. The mocked user input simulates the user entering a valid receipt number 1 and rating 4.2 for the book that they are returning. The return_book function updates the book status to "available", sets the due date to "None", and updates the book rate with the average of the current book rate and the user's rating. The expected output which is (4.5+4.2)/2=4.3 (only keeps one decimal place) in the assert statement matches the updated book data with the correct values.
 ```python
 # test case1- returning a borrowed book with a valid receipt number and rating -pass
 @pytest.fixture
@@ -133,7 +133,7 @@ def test_return_book_success(sample_books, mocker):
 ```
 
 Test Case 2:
-test_return_book_invalid_receipt_number() tests that when a user enters an invalid receipt number, the function returns a None value without updating the book information.
+test_return_book_invalid_receipt_number() tests that when a user enters an invalid receipt number 4, the function returns a None value without updating the book information.
 ```python
 def test_return_book_invalid_receipt_number(sample_books, mocker):
     # mock user input
@@ -149,6 +149,9 @@ def test_return_book_invalid_receipt_number(sample_books, mocker):
 This test mainly tests the functionality of the add_book() function, whether it can correctly add consecutive book IDs, and whether the program will report an error when the customer inputs an existing book name。
 
 Test Case 1:
+This test case is designed to test if the max id in the book list can be correctly collected, which takes a list of books and returns the maximum ID value of all the books in the list.
+
+The test case creates a sample list of books with two books, each with a unique ID. The test then calls the get_max_id function with this list and checks if the function returns the correct maximum ID value, which should be 2.
 ```python
 #Test Case 1 : Max id is correctly collected from the book list - pass
 def get_max_id(books):
@@ -161,9 +164,12 @@ def test_get_max_id():
     ]
     assert get_max_id(books) == 2
 ```
+Test Case 2:
+
+This test case is designed to verify if the book id correctly +1 to the book list when adding a new book. The test case sets up a sample list of books with two existing books and mocks user input values for a new book's name and author. The test then calls the add_book function with this list and checks if the function correctly adds the new book to the list with the expected ID.
 ```python
 # Test Case 2: expected_id is correctly added to new book lists - pass
-'''This test case is designed to verify if the book id correctly +1 to the book list when add a new book.'''
+'''This test case is designed to verify if the book id correctly +1 to the book list when adding a new book.'''
 def test_add_book():
     # Set up test data
     books = [
@@ -186,6 +192,13 @@ def test_add_book():
     # Assert that the new book has the expected ID
     assert actual_id == expected_id
 ```
+Test Case 3:
+This test case is designed to test when a user attempts to add a book to the book list that already exists.
+
+The test case sets up a sample list of books with one existing book, which has the name "Python is amazing" and the author "Helena Han". The test then mocks user input values for a new book with the same name and author as the existing book, and calls the add_book function with this list.
+
+The test then checks whether the function correctly detects that the book already exists in the book list and prints a message to inform the user that the book is already in the list and won't be added again.
+
 ```python
 # Test Case 3: Book name already exists in the list - pass
 def test_add_book_already_exists(capsys):
@@ -205,7 +218,7 @@ def test_add_book_already_exists(capsys):
     with patch('builtins.input', side_effect=["Python is amazing", "Helena Han"]):
         add_book(books)
 
-    # Assert that the book is already in the list and won't add again
+    # Assert that the book is already in the list and won't be added again
     captured = capsys.readouterr()
     assert "Book 'Python is amazing' already exists in the list." in captured.out
 ```
