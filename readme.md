@@ -258,9 +258,10 @@ Malik, U. (2021, June 8). Python: Validate Email Address with Regular Expression
 
 CodingNConcepts. Java Regex to Validate Phone Number. Retrieved April 17, 2023, https://codingnconcepts.com/java/java-regex-to-validate-phone-number/#regex-to-match-10-digit-phone-number-with-no-space
 
-Python RegEx. *W3Schools*. Retrieved April 16, 2023, from https://www.w3schools.com/python/python_regex.asp
+Python RegEx. *W3Schools*. Retrieved April 16, 2023, https://www.w3schools.com/python/python_regex.asp
 
-Detect Python version in shell script. *Stack Overflow* Retrieved April 23, 2023, https://stackoverflow.com/questions/6141581/detect-python-version-in-shell-script
+Detect Python version in shell script. *Stack Overflow* Retrieved April 23, 2023, 
+https://stackoverflow.com/questions/6141581/detect-python-version-in-shell-script
 
 
 System Requirements. *TechTerms*. Retrieved April 28, 2023, https://techterms.com/definition/system_requirements
