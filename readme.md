@@ -108,7 +108,7 @@ The testing for this project involves a combination of manual and automated test
 
 Here are some examples of automated testing using pyTest: 
 
-[test_case.py](../src/test_case.py)
+[test_case.py](./src/test_case.py)
 
 #### Test1:
 This test is designed to test if the return_book function can successfully return a borrowed book with a valid receipt number and rating.
