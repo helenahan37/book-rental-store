@@ -92,7 +92,7 @@ def main():
                 if not prompt_yes_or_no(f"\n{fg(193)}{attr('bold')}Do you want to continue to add new book? (y/n):  {attr(0)}"):
                     print(f"\n{fg(216)}{attr('bold')}Thank you for using our online adding book service. {attr(0)}")
                     break
-
+ 
         elif user_choice == "4":
             write_db(books, csv_file)
             print(f"{fg(216)}{attr('bold')}\nThank you for using our online book rental store. See you next time! {attr(0)}")           

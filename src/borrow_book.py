@@ -36,7 +36,7 @@ def borrow_book(selected_book):
             "book_id": receipt_id,
             "book_name": selected_book["name"],
             "borrow_date": now.date(),
-            "due_date": now.date() + datetime.timedelta(days=7),
+            "due_date": now.date() + datetime.timedelta(days=30),
             "deposit": deposit,
         }
         print(f"\n{fg(216)}{attr('bold')}Thank you for borrowing {selected_book['name']}. Here is your receipt. {attr('reset')}") 
@@ -46,7 +46,7 @@ def borrow_book(selected_book):
 
         # update the selected book status and due date
         selected_book["status"] = "unavailable"
-        selected_book["due_date"] = (now.date() + datetime.timedelta(days=7)).strftime("%Y-%m-%d")
+        selected_book["due_date"] = (now.date() + datetime.timedelta(days=30)).strftime("%Y-%m-%d")
         selected_book["receipt_number"] = receipt_num
 
         return selected_book

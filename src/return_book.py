@@ -22,7 +22,7 @@ def return_book(books):
                         # rate the book and update the book rate information
                         try:
                             current_book_rate = float(input(f"\n{fg(122)}Please rate the book you have borrowed:  {attr(0)}"))       
-                            if current_book_rate <= 0 or current_book_rate > 5:
+                            if current_book_rate < 1 or current_book_rate > 5:
                                 raise ValueError
                         except ValueError:
                             print(f"\n{fg(229)}Invalid input. Please enter a non-zero number (from 1-5)")
