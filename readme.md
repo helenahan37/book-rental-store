@@ -25,7 +25,7 @@ The Online Book Rental Store application, as the name suggests, is a convenient 
 This feature allows users to borrow a book online, it imports the 'PrettyTable' module to create a well-organized and easily readable table to present the book information stored in a CSV document to customers (a try-except statement has been used here to check if a CSV file exists). The table is constructed using the PrettyTable function, which defines the column headers. Next, the program iterates through a list of books, appending the data of each book as a row to the table. 
 
 Finally, the program prints out the entire table containing all book details, making it simple for customers to comprehend the availability of each book. 
-![Book list Table](./docs/book%20list%20table.png)
+![Booklist Table](./docs/book%20list%20table.png)
 
 #### Borrowed receipt:
 When customers viewed the book list, the select book function prompts them to enter a book ID. The program then searches the book list to determine if the book is available or not and informs the customer of their choice's availability through prompt statements. 
