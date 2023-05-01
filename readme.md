@@ -25,16 +25,16 @@ The Online Book Rental Store application, as the name suggests, is a convenient 
 This feature allows users to borrow a book online, it imports the 'PrettyTable' module to create a well-organized and easily readable table to present the book information stored in a CSV document to customers (a try-except statement has been used here to check if a CSV file exists). The table is constructed using the PrettyTable function, which defines the column headers. Next, the program iterates through a list of books, appending the data of each book as a row to the table. 
 
 Finally, the program prints out the entire table containing all book details, making it simple for customers to comprehend the availability of each book. 
-![Book list Table](./book%20list%20table.png)
+![Book list Table](./docs/book%20list%20table.png)
 
 #### Borrowed receipt:
 When customers viewed the book list, the select book function prompts them to enter a book ID. The program then searches the book list to determine if the book is available or not and informs the customer of their choice's availability through prompt statements. 
 
 If the customer successfully chooses an available book, they can input their personal information (regex format used here) to receive a borrowed receipt. 
-![borrowed receipt](./borrowed%20receipt.png)
+![borrowed receipt](./docs/borrowed%20receipt.png)
 
 If the book is not available, the program will use the imported "datetime" module to inform the customer of the number of days until the book becomes available again. This is done by subtracting the current date from the book's due date.
-![time checker](./time%20checker.png)
+![time checker](./docs/time%20checker.png)
 
 The program then updates the book list accordingly. Additionally, it uses a while loop to repeatedly ask the customer if they want to view the latest book information when borrowing, returning, or adding a book. If the customer agrees, the program displays the updated book information using the table.
 
@@ -50,26 +50,26 @@ If the rating is valid, the program calculates a new average rating for the book
 Overall, this feature provides a straightforward and user-friendly way for users to return books and update their ratings while ensuring the validity of the input and displaying relevant information to the user.
 
 
-![return book feature](return%20book.png)
+![return book feature](./docs/return%20book.png)
 
 ### Add books:
 This feature is relatively straightforward. It allows users to add a new book to the online bookstore by entering its name and author. The "add_book" function accepts a list of books from the CSV file as input. It then creates a new dictionary for the book based on the user's input for the name and author, which is validated using regular expressions and prompt statements. Also, try-except statements to used here to catch any ValueError that may be raised when checking if the book already exists in the list. The new book's ID is added sequentially based on the current maximum value stored in the dictionary. The book's status and due date are marked as 'unavailable', which is used to determine the availability of the book when the user selects a book combined with the select book function. Other details, such as rental price, book rating, and receipt number, are not processed at this stage and are instead set to "N/A", which can be updated by the admin later. Finally, the program adds the new book information to the "books" list and returns the updated list.
 
-![add new book](Add%20new%20book.png)
+![add new book](./docs/Add%20new%20book.png)
 
 ## Software Development Plan:
 When choosing a programming project, my goal was to implement functions within a program that could allow for adding, removing, and manipulating list items, performing simple mathematical operations, reading/saving files and combining with nested control structures. After considering these factors, I decided to choose the online book rental store project. This idea was also approved by the educator in our class group.
 
 Here is the flowchart of my project:
 ## Flowchart
-![flowchart](./flowchart.png)
+![flowchart](./docs/flowchart.png)
 
 The entire project is being managed and tracked through Trello. This software allows me to categorize my project into different tags based on their functionalities and features, and further subdivide them into different items. I have classified these items based on their level of importance and set estimated completion times. These details will be adjusted and updated as the program progresses.
 
 Here is the screenshot of my Trello Board:
-![Trello1](Trello1.png)
-![Trello2](Trello2.png)
-![Trello3](trello%203.png)
+![Trello1](./docs/Trello1.png)
+![Trello2](./docs/Trello2.png)
+![Trello3](./docs/trello%203.png)
 
 
 ## Help Documentation
@@ -236,8 +236,8 @@ def test_add_book_already_exists(capsys):
 ## Manual Testing Ledger:
 **[Link to Manual Testing Ledger](https://docs.google.com/spreadsheets/d/1Spjjr21O0xiv_KOr_VqqY-MLBG3ZR-DYsB5CUbTipL8/edit#gid=0)**
 
-![Manual test screenshot](./manual%20test.png)
-![Manual test screenshot2](./manual%20test2.png)
+![Manual test screenshot](./docs/manual%20test.png)
+![Manual test screenshot2](./docs/manual%20test2.png)
 
 
 ---
