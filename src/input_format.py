@@ -4,7 +4,7 @@ from colored import fg, bg, attr
 # Regex
 email_regex = re.compile(
  r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
-phone_regex = re.compile(r'^0\d{9}$')
+phone_regex = re.compile(r'^0(?![0]{9})\d{9}$')
 name_regex = re.compile(r'^[A-Za-z][A-Za-z_.\s]{5,20}[A-Za-z]$')
 address_regex = re.compile(r'^[\d\s\w]{10,50}$')
 book_name_regex = re.compile(r'^(?=.*[a-zA-Z0-9])[a-zA-Z0-9\s\-\.:]{5,20}$')
@@ -24,7 +24,7 @@ def validate_phone():
     while True:
         phone = input("Phone: ")
         if not phone_regex.match(phone):
-            print(f"\n{fg(229)}Sorry, the phone number you have entered is not valid, please try again, format: 10-digit phone number start from 0. {attr(0)}")
+            print(f"\n{fg(229)}Sorry, the phone number you have entered is not valid, please try again, format: 10-digit phone number start from 0, but cannot all 0. {attr(0)}")
         else:
             return phone
 
