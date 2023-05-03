@@ -5,4 +5,3 @@ id,name,author,rental_price,status,due_date,book_rate,receipt_number
 004,Expert Python Programming,Tarek Ziade,15.7,unavailable,2023-05-28,4.0,72
 005,Python Network Programming,Dr. M. O. Faruque Sarker,23.5,available,None,4.2,0
 006,I love python,Helena.Han,0.0,unavailable,unavailable,0.0,0
-007,Python is Great,Mike Lee,0.0,unavailable,unavailable,0.0,0
