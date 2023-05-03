@@ -85,7 +85,7 @@ To install and run this program
 6. Now you can run ```./run.sh``` to start the app
 
 ### Dependencies:
-The project requires the following dependencies, you can install all of them by run ```run.sh```
+The project requires the following dependencies, you can install all of them by run ```./run.sh```
 ```
 colored==1.4.4
 iniconfig==2.0.0
