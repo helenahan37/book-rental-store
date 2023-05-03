@@ -8,5 +8,5 @@ then
 
 else
     #Python is not installed
-    echo "No Python executable is found."
+    echo "No Python executable is found. Please install Python 3.6 or higher. You can download it from https://www.python.org/downloads/"
 fi

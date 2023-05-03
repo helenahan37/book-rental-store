@@ -1,5 +1,4 @@
 #!/bin/bash
-
 if [ -d main-venv ]; then
   echo "venv environment exists"
 else
