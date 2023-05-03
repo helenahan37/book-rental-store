@@ -33,7 +33,7 @@ def validate_name():
     while True:
         name = input("Name: ")
         if not name_regex.match(name):
-            print(f"\n{fg(229)}Sorry, the name you have entered is not valid, please try again, format: 6-21 characters, only letters, space, dot and underscore. {attr(0)}")
+            print(f"\n{fg(229)}Sorry, the name you have entered is not valid, please try again, format: 7-22 characters, only letters, space, dot and underscore. {attr(0)}")
         else:
             return name
 
@@ -60,6 +60,6 @@ def validate_author_name():
     while True:
         book_author = input("Book Author: ")
         if not name_regex.match(book_author):
-            print(f"\n{fg(229)}Sorry, the author name you have entered is not valid, please try again, format: 6-21 characters, only letters, space, dot and underscore. {attr(0)}")
+            print(f"\n{fg(229)}Sorry, the author name you have entered is not valid, please try again, format: 7-22 characters, only letters, space, dot and underscore. {attr(0)}")
         else:
             return book_author
