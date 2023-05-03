@@ -33,7 +33,7 @@ def validate_name():
     while True:
         name = input("Name: ")
         if not name_regex.match(name):
-            print(f"\n{fg(229)}Sorry, the name you have entered is not valid, please try again, format: 7-22 characters, only letters, space, dot and underscore. {attr(0)}")
+            print(f"\n{fg(229)}Sorry, the name you have entered is not valid, please try again, format: 7-22 characters, including letters, space, dot and underscore. {attr(0)}")
         else:
             return name
 
@@ -42,7 +42,7 @@ def validate_address():
     while True:
         address = input("Address: ")
         if not address_regex.match(address):
-            print(f"\n{fg(229)}Sorry, the address you have entered is not valid, please try again, format: 10-50 characters, only letters, numbers and space. {attr(0)}")
+            print(f"\n{fg(229)}Sorry, the address you have entered is not valid, please try again, format: 10-50 characters, including letters, numbers and space. {attr(0)}")
         else:
             return address
         
@@ -51,7 +51,7 @@ def validate_book_name():
     while True:
         book_name = input("Book Name: ")
         if not book_name_regex.match(book_name):
-            print(f"\n{fg(229)}Sorry, the book name you have entered is not valid, please try again, format: 5-20 characters, only letters, space, hyphen, dot and colon. {attr(0)}")
+            print(f"\n{fg(229)}Sorry, the book name you have entered is not valid, please try again, format: 5-20 characters, including letters, numbers, space, hyphen, dot and colon. {attr(0)}")
         else:
             return book_name
         
@@ -60,6 +60,6 @@ def validate_author_name():
     while True:
         book_author = input("Book Author: ")
         if not name_regex.match(book_author):
-            print(f"\n{fg(229)}Sorry, the author name you have entered is not valid, please try again, format: 7-22 characters, only letters, space, dot and underscore. {attr(0)}")
+            print(f"\n{fg(229)}Sorry, the author name you have entered is not valid, please try again, format: 7-22 characters, including letters, space, dot and underscore. {attr(0)}")
         else:
             return book_author
