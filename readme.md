@@ -82,10 +82,10 @@ To install and run this program
 3. Navigate to the source file by ```cd T1A3/src ```
 4. This project required Python3, please check your Python version by run ```chmod +x python_version_check.sh``` and ```./python_version_check.sh``` 
 5. Check venv environment by run ```chmod +x venv_check.sh``` and ```./venv_check.sh```
-6. Now you can run ```./run.sh``` to start the app
+6. Now you can run ```source run.sh``` to start the app
 
 ### Dependencies:
-The project requires the following dependencies, you can install all of them by run ```./run.sh```
+The project requires the following dependencies, you can install all of them by run ```source run.sh```
 ```
 colored==1.4.4
 iniconfig==2.0.0
