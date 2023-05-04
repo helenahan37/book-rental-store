@@ -83,7 +83,7 @@ To install and run this program
 4. This project required Python3, please check your Python version by run ```chmod +x python_version_check.sh``` to get the file executable permission then run ```./python_version_check.sh```. 
 If you don't have Python3 installed, please install it by run ```brew install python3``` in your terminal or follow this [link](https://www.python.org/downloads/) to download it.
 5. Check venv environment by run ```chmod +x venv_check.sh``` and ```./venv_check.sh```. If you have not created any venv environment in the folder, please run ```python3 -m venv <venv-name>``` to create one.
-6. Now you can run ```source run.sh``` to start the app
+6. Now you can run ```chmod +x run.sh``` and ```source run.sh``` to start the app
 
 ### Dependencies:
 The project requires the following dependencies, you can install all of them by run ```source run.sh```
