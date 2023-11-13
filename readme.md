@@ -1,4 +1,4 @@
-# T1A3 - Online Book Rental Store
+Online Book Rental Store
 ---
 ### GitHub Repository 
 
