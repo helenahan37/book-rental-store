@@ -1,18 +1,6 @@
 Online Book Rental Store
 ---
-### GitHub Repository 
 
-**[Link to GitHub Repository](https://github.com/helenahan37/T1A3)**
-***
-
-### Presentation 
-
-**[Link to Presentation Video](https://www.youtube.com/watch?v=sFNukY2D3HU)**
-***
-### Trello Board
-
-**[Link to Trello Board](https://trello.com/b/pEMan2li/online-book-rental-store)**
-***
 ## Main Features And Characteristics:
 The Online Book Rental Store application, as the name suggests, is a convenient terminal application that allows customers to repeatedly view the book listing, rent books, return books, and add books after starting to use the application. It has the following main features and characteristics:
 
